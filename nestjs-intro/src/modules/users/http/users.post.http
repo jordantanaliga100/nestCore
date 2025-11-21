@@ -1,4 +1,11 @@
 POST http://localhost:3000/api/v1/users
 Content-Type: application/json
 
-{}
+{
+  "name": "john",
+  "lastname": "doe",
+  "email":"john@mail.com",
+  "password": "secret",
+  "sample": "sample"
+
+}
