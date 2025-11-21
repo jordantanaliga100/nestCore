@@ -11,25 +11,51 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
+import { CreateUserDto } from './dto/create-user.dto';
+import {
+  GetUserParamRequiredDto,
+  GetUserQueryDto,
+  GetUsersParamDto,
+} from './dto/get-users-query-param.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { UsersService } from './users.service';
 // @Param() params: any, @Query() query: any)
 
 @Controller('users')
 export class UsersController {
-  @Get()
-  @Get('{/:id}{/:optional}')
+  constructor(private readonly userSrvice: UsersService) {}
+
+  @Get('{/:id}{/:username}')
   public getUsers(
-    @Param('id') id: number | undefined,
-    @Param('optional') optional: string | undefined,
-    @Query('limit') limit?: number,
-    @Query('offset') offset?: number,
+    // BASIC WAY 🔴 | using param
+    // @Param('id', ParseIntPipe) id: number | undefined,
+    // @Param('username') username: string | undefined,
+    // @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit?: number,
+    // @Query('page', new DefaultValuePipe(1), ParseIntPipe) page?: number,
+
+    // MODULAR WAY 🔴 | using DTO param
+    @Param() getUserParamDto: GetUsersParamDto,
+    @Query() getUserQueryDto: GetUserQueryDto,
   ): string {
-    console.log(id, optional, limit, offset);
+    console.log('DTO PARAMS', getUserParamDto);
+
+    console
+      .log
+      // typeof id,
+      // typeof username,
+      // typeof page,
+      // typeof limit,
+      ();
+
+    console.log(getUserParamDto, getUserQueryDto);
 
     if (
-      typeof id === 'undefined' &&
-      typeof optional === 'undefined' &&
-      typeof limit === 'undefined' &&
-      typeof offset === 'undefined'
+      // typeof id === 'undefined' &&
+      // typeof username === 'undefined' &&
+      // typeof page === 'undefined' &&
+      // typeof limit === 'undefined'
+      typeof getUserParamDto === 'undefined' &&
+      typeof getUserQueryDto === 'undefined'
     ) {
       return `You requested ALL users`;
     } else {
@@ -40,28 +66,35 @@ export class UsersController {
   @Post()
   public createUser(
     @Body()
-    body: any,
+    createUserDto: CreateUserDto,
     @Headers() headers: any,
     @Ip() ip: any,
   ): {
     message: string;
-    body: any;
+    createUserDto: CreateUserDto;
     headers: any;
     ip: any;
   } {
+    console.log(createUserDto instanceof CreateUserDto);
+
     return {
       message: 'You sent a POST request to the users endpoint',
-      body,
+      createUserDto,
       headers,
       ip,
     };
   }
 
   @Patch(':id')
-  public updateUser(@Param('id') id: string, @Body() body: any) {
+  public updateUser(
+    @Param() getUserParamRequiredDto: GetUserParamRequiredDto,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    const { id } = getUserParamRequiredDto;
+
     return {
-      message: `You sent a PATCH request to update user #${id}`,
-      body,
+      message: `You sent a PATCH request to update user ${id}`,
+      data: updateUserDto,
     };
   }
 
@@ -69,7 +102,6 @@ export class UsersController {
   public replaceUser(@Param('id') id: string, @Body() body: any) {
     return {
       message: `You sent a PUT request to replace user #${id}`,
-      body,
     };
   }
 
@@ -84,4 +116,3 @@ export class UsersController {
 // @Param('optional') optional?: string,
 // @Query('limit') limit?: string,
 // @Query('offset') offset?: string,
-// constructor(private readonly userSrvice: UsersService) {}

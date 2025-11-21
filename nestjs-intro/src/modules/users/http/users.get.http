@@ -1,4 +1,7 @@
-# GET http://localhost:3000/api/v1/users/12345/optional?limit=10&offset=20
-GET http://localhost:3000/api/v1/users
+GET http://localhost:3000/api/v1/users/12345/tanaliga
+
+
+
+# GET http://localhost:3000/api/v1/users
 
 
