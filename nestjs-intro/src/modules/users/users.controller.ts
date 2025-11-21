@@ -80,7 +80,9 @@ export class UsersController {
     return {
       message: 'You sent a POST request to the users endpoint',
       createUserDto,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       headers,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       ip,
     };
   }
@@ -99,7 +101,7 @@ export class UsersController {
   }
 
   @Put(':id')
-  public replaceUser(@Param('id') id: string, @Body() body: any) {
+  public replaceUser(@Param('id') id: string) {
     return {
       message: `You sent a PUT request to replace user #${id}`,
     };
