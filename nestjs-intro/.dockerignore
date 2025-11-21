@@ -1,0 +1,33 @@
+# Node modules (we install in container)
+node_modules
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# Build output
+dist
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile*
+.dockerignore
+
+# IDE / Editor
+.vscode
+.idea
+*.swp
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Optional local env files (if you use)
+.env
+.env.local
+.env.development
+.env.test
