@@ -10,22 +10,35 @@ import {
   Query,
 } from '@nestjs/common';
 // @Param() params: any, @Query() query: any)
+
 @Controller('users')
 export class UsersController {
-  @Get('{:id}{/:optional}')
-  public getUsers(@Param() params: any, @Query() query: any) {
-    console.log('PARAMS', params);
-    console.log('QUERY', query);
+  @Get()
+  @Get('{/:id}{/:optional}')
+  public getUsers(
+    @Param('id') id: number | undefined,
+    @Param('optional') optional: string | undefined,
+    @Query('limit') limit?: number,
+    @Query('offset') offset?: number,
+  ): string {
+    console.log(id, optional, limit, offset);
 
-    return `You sent a GET request WITH PARAMS AND QUERY to the users endpoint  `;
+    if (
+      typeof id === 'undefined' &&
+      typeof optional === 'undefined' &&
+      typeof limit === 'undefined' &&
+      typeof offset === 'undefined'
+    ) {
+      return `You requested ALL users`;
+    } else {
+      return `You sent a GET request WITH PARAMS AND QUERY to the users endpoint  `;
+    }
   }
 
   @Post()
-  public createUser(@Body() body: any) {
-    return {
-      message: 'You sent a POST request to the users endpoint',
-      body,
-    };
+  public createUser<T>(@Body() body: T): string {
+    console.log('body', body);
+    return 'You sent a POST request to the users endpoint';
   }
 
   @Patch(':id')
