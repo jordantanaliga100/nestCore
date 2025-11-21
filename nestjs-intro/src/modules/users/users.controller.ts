@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
+  Ip,
   Param,
   Patch,
   Post,
@@ -36,9 +38,23 @@ export class UsersController {
   }
 
   @Post()
-  public createUser<T>(@Body() body: T): string {
-    console.log('body', body);
-    return 'You sent a POST request to the users endpoint';
+  public createUser(
+    @Body()
+    body: any,
+    @Headers() headers: any,
+    @Ip() ip: any,
+  ): {
+    message: string;
+    body: any;
+    headers: any;
+    ip: any;
+  } {
+    return {
+      message: 'You sent a POST request to the users endpoint',
+      body,
+      headers,
+      ip,
+    };
   }
 
   @Patch(':id')
