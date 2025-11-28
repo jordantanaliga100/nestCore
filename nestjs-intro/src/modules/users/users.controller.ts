@@ -6,62 +6,20 @@ import {
   Headers,
   Ip,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Put,
-  Query,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import {
-  GetUserParamRequiredDto,
-  GetUserQueryDto,
-  GetUsersParamDto,
-} from './dto/get-users-query-param.dto';
+import { GetUserParamRequiredDto } from './dto/get-users-query-param.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 // @Param() params: any, @Query() query: any)
 
-@Controller('users')
+@Controller('users/')
 export class UsersController {
-  constructor(private readonly userSrvice: UsersService) {}
-
-  @Get('{/:id}{/:username}')
-  public getUsers(
-    // BASIC WAY 🔴 | using param
-    // @Param('id', ParseIntPipe) id: number | undefined,
-    // @Param('username') username: string | undefined,
-    // @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit?: number,
-    // @Query('page', new DefaultValuePipe(1), ParseIntPipe) page?: number,
-
-    // MODULAR WAY 🔴 | using DTO param
-    @Param() getUserParamDto: GetUsersParamDto,
-    @Query() getUserQueryDto: GetUserQueryDto,
-  ): string {
-    console.log('DTO PARAMS', getUserParamDto);
-
-    console
-      .log
-      // typeof id,
-      // typeof username,
-      // typeof page,
-      // typeof limit,
-      ();
-
-    console.log(getUserParamDto, getUserQueryDto);
-
-    if (
-      // typeof id === 'undefined' &&
-      // typeof username === 'undefined' &&
-      // typeof page === 'undefined' &&
-      // typeof limit === 'undefined'
-      typeof getUserParamDto === 'undefined' &&
-      typeof getUserQueryDto === 'undefined'
-    ) {
-      return `You requested ALL users`;
-    } else {
-      return `You sent a GET request WITH PARAMS AND QUERY to the users endpoint  `;
-    }
-  }
+  constructor(private readonly usersService: UsersService) {}
 
   @Post()
   public createUser(
@@ -85,6 +43,31 @@ export class UsersController {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       ip,
     };
+  }
+
+  @Get()
+  public getUser() {
+    // so pwede ako mag query dito sa userService ng findAll()
+
+    return {
+      message: `You sent a GET request to  user `,
+    };
+  }
+
+  @Get(':id{/:optional}')
+  public getUsers(
+    @Param('id', new ParseIntPipe({ optional: true })) id?: number,
+    @Param('optional') optional?: string,
+  ): string {
+    console.log(id, optional);
+
+    if (id && !optional) {
+      // so pwede ako mag query dito sa userService ng findUser(id)
+      return `You sent a GET request with ID to the users endpoint  `;
+    } else {
+      // so pwede ako mag query dito sa userService ng findUser(id, posts)
+      return `You sent a GET request with OPTIONAL PARAMS to the users endpoint  `;
+    }
   }
 
   @Patch(':id')
@@ -118,3 +101,6 @@ export class UsersController {
 // @Param('optional') optional?: string,
 // @Query('limit') limit?: string,
 // @Query('offset') offset?: string,
+// MODULAR WAY 🔴 | using DTO param
+// @Param() getUserParamDto: GetUsersParamDto,
+// @Query() getUserQueryDto: GetUserQueryDto,

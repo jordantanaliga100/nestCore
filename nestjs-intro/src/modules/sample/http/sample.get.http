@@ -1,0 +1,5 @@
+GET  http://localhost:3000/api/v1/sample/index/admin
+
+# GET http://localhost:3000/api/v1/sample/admin/2020?limit=20&page=3
+
+

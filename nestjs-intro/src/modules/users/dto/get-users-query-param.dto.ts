@@ -4,11 +4,6 @@ import { IsInt, IsOptional, IsString } from 'class-validator';
 
 export class GetUsersParamDto {
   @IsOptional()
-  @IsInt()
-  @Type(() => Number)
-  id?: number;
-
-  @IsOptional()
   @IsString()
   @Type(() => String)
   username?: string;
@@ -27,7 +22,7 @@ export class GetUserQueryDto {
 }
 
 export class GetUserParamRequiredDto {
-  @IsInt()
+  @IsInt({ message: 'ID must be an integer' })
   @Type(() => Number)
   id!: number;
 }

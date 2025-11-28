@@ -1,0 +1,12 @@
+POST http://localhost:3000/api/v1/sample
+Content-Type: application/json
+
+{
+  "local":"",
+  "name": "Sample name",
+  "age": "123",
+  "description":"Sample description",
+  "tags": ["cebuano"]
+
+}
+
