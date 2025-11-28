@@ -1,15 +1,14 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
-  Headers,
-  Ip,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { GetUserParamRequiredDto } from './dto/get-users-query-param.dto';
@@ -25,43 +24,43 @@ export class UsersController {
   public createUser(
     @Body()
     createUserDto: CreateUserDto,
-    @Headers() headers: any,
-    @Ip() ip: any,
   ): {
     message: string;
-    createUserDto: CreateUserDto;
-    headers: any;
-    ip: any;
+    data?: CreateUserDto;
   } {
     console.log(createUserDto instanceof CreateUserDto);
 
     return {
       message: 'You sent a POST request to the users endpoint',
-      createUserDto,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      headers,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      ip,
+      data: createUserDto,
     };
   }
 
   @Get()
   public getUser() {
     // so pwede ako mag query dito sa userService ng findAll()
-
     return {
       message: `You sent a GET request to  user `,
     };
   }
 
-  @Get(':id{/:optional}')
+  @Get(':id/:category?')
   public getUsers(
-    @Param('id', new ParseIntPipe({ optional: true })) id?: number,
-    @Param('optional') optional?: string,
+    @Param('id') id?: number,
+    @Param('category') category?: string,
+    @Query('limit', new DefaultValuePipe(10)) limit?: number,
+    @Query('page', new DefaultValuePipe(1)) page?: number,
   ): string {
-    console.log(id, optional);
+    console.log('route params', {
+      id,
+      category,
+    });
+    console.log('query params', {
+      limit,
+      page,
+    });
 
-    if (id && !optional) {
+    if (id && !category) {
       // so pwede ako mag query dito sa userService ng findUser(id)
       return `You sent a GET request with ID to the users endpoint  `;
     } else {
