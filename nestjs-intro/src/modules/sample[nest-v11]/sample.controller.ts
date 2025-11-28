@@ -43,7 +43,11 @@ export class SampleController {
   @Get('index{/:role}{/:year}')
   findAll(
     @Param('role') role?: string,
-    @Param('year', new ParseIntPipe({ optional: true })) year?: number,
+    // 🔴 for v11 this works
+    // @Param('year', new ParseIntPipe({ optional: true })) year?: number,
+    // 🔴 for v10 this works
+    @Param('year', new ParseIntPipe()) year?: number,
+
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe)
     limit?: number,
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page?: number,
