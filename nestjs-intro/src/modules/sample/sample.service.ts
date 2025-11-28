@@ -5,11 +5,19 @@ import { UpdateSampleDto } from './dto/update-sample.dto';
 @Injectable()
 export class SampleService {
   create(createSampleDto: CreateSampleDto) {
-    return 'This action adds a new sample';
+    const res = {
+      message: `This action adds a new sample `,
+      createSampleDto,
+    };
+    return res;
   }
 
-  findAll() {
-    return `This action returns all sample`;
+  findAll(role?: string, year?: number) {
+    if (typeof role === 'undefined' && typeof year === 'undefined') {
+      return `You requested ALL users`;
+    } else {
+      return `You sent a GET request WITH PARAMS AND QUERY to the users endpoint  `;
+    }
   }
 
   findOne(id: number) {
