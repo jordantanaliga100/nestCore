@@ -11,7 +11,6 @@ USER root
 RUN npm ci && npm cache clean --force  
 COPY . . 
 EXPOSE 3000
-USER nestjs 
 CMD ["npm", "run", "start:dev"]   
 
 # =====================
@@ -36,3 +35,5 @@ USER nestjs
 EXPOSE 3000 
 ENV NODE_ENV=production
 CMD [ "node", "dist/main.js" ]
+
+
