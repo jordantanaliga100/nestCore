@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-redundant-type-constituents */
 import {
   BadRequestException,
@@ -85,6 +84,8 @@ export class UsersController {
     //   limit,
     //   page,
     // });
+
+    return this.usersService.findAllUsers(getUsersRouteParamsDto, limit, page);
   }
 
   @Patch(':id?')

@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
+import { AuthService } from '../auth/providers/auth.service';
 import { GetUsersRouteParamDto } from './dto/get-users-query-param.dto';
 
 export interface User {
@@ -10,11 +17,28 @@ export interface User {
 
 @Injectable()
 export class UsersService {
+  constructor(
+    @Inject(forwardRef(() => AuthService))
+    private readonly authService: AuthService,
+  ) {}
+
   findAllUsers(
     getUserRouteParamDto: GetUsersRouteParamDto,
     limit: number,
     page: number,
   ) {
+    //
+    const isAuth = this.authService.isAuth();
+    if (!isAuth) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNAUTHORIZED,
+          error: '💁 You need to be authenticated ',
+        },
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
     const users: User[] = [
       { id: 1, name: 'john', email: 'john@mail.com' },
       { id: 2, name: 'doe', email: 'doe@mail.com' },
