@@ -108,7 +108,7 @@ export class UsersController {
     //   page,
     // });
 
-    return this.usersService.findAllUsers(getUsersRouteParamsDto, limit, page);
+    return this.usersService.findAll(getUsersRouteParamsDto, limit, page);
   }
 
   @Patch(':id?')

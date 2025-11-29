@@ -15,14 +15,20 @@ export interface User {
   email: string;
 }
 
+/**
+ * Class to connect to users table
+ */
 @Injectable()
 export class UsersService {
   constructor(
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
   ) {}
-
-  findAllUsers(
+  /**
+   * The method to get all the users from the database
+   
+   */
+  findAll(
     getUserRouteParamDto: GetUsersRouteParamDto,
     limit: number,
     page: number,
@@ -47,6 +53,10 @@ export class UsersService {
     return users;
   }
 
+  /**
+   * finding a single user
+
+   */
   findOneById(id: string) {
     // const users: User[] = [
     //   { id: 1, name: 'john', email: 'john@mail.com' },
