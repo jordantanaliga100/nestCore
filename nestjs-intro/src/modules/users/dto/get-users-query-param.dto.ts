@@ -24,6 +24,7 @@ export class GetUserQueryParamDto {
   page?: number = 1;
 }
 
+// ❗doesnt make sense to have optional id
 export class GetUserRouteParamRequiredDto {
   @IsNotEmpty({ message: 'ID is required' })
   @IsInt({ message: 'ID must be an integer' })

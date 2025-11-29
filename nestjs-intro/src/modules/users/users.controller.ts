@@ -1,6 +1,8 @@
 import {
+  BadRequestException,
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   Param,
@@ -12,16 +14,25 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import {
-  GetUserQueryParamDto,
+  GetUserRouteParamRequiredDto,
   GetUsersRouteParamDto,
 } from './dto/get-users-query-param.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UsersService } from './users.service';
+import { User, UsersService } from './users.service';
 // @Param() params: any, @Query() query: any)
 
 @Controller('users/')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  // @Get()
+  // public getUser(): { message: string; data?: any } {
+  //   const users = this.usersService.findAllUsers();
+  //   return {
+  //     message: 'You sent a GET request to the users endpoint',
+  //     data: users,
+  //   };
+  // }
 
   @Post()
   public createUser(
@@ -39,29 +50,30 @@ export class UsersController {
     };
   }
 
-  // @Get()
-  // public getUser() {
-  //   // so pwede ako mag query dito sa userService ng findAll()
-  //   return {
-  //     message: `You sent a GET request to  user `,
-  //   };
-  // }
-
-  @Get(':id?/:category?')
+  @Get(':id?')
   public getUsers(
     @Param() getUsersRouteParamsDto: GetUsersRouteParamDto,
-    @Query() getUserQueryParamDto: GetUserQueryParamDto,
-  ): string {
+    @Query('limit', new DefaultValuePipe(100)) limit: number,
+    @Query('page', new DefaultValuePipe(1)) page: number,
+  ): User | User[] | undefined {
     console.log(getUsersRouteParamsDto);
-    console.log(getUserQueryParamDto);
-
-    if (getUsersRouteParamsDto) {
-      // so pwede ako mag query dito sa userService ng findUser(id)
-      return `You sent a GET request with ID to the users endpoint  `;
+    if (getUsersRouteParamsDto.id) {
+      return this.usersService.findOneById(getUsersRouteParamsDto);
     } else {
-      // so pwede ako mag query dito sa userService ng findUser(id, posts)
-      return `You sent a GET request with OPTIONAL PARAMS to the users endpoint  `;
+      return this.usersService.findAllUsers(
+        getUsersRouteParamsDto,
+        limit,
+        page,
+      );
     }
+
+    // if (getUsersRouteParamsDto) {
+    //   // so pwede ako mag query dito sa userService ng findUser(id)
+    //   return `You sent a GET request with ID to the users endpoint  `;
+    // } else {
+    //   // so pwede ako mag query dito sa userService ng findUser(id, posts)
+    //   return `You sent a GET request with OPTIONAL PARAMS to the users endpoint  `;
+    // }
 
     // console.log('route params', {
     //   id: typeof id,
@@ -73,13 +85,17 @@ export class UsersController {
     // });
   }
 
-  @Patch(':id')
+  @Patch(':id?')
   public updateUser(
-    @Param('id', ParseIntPipe) id: number,
+    @Param() getUserRouteParamRequiredDto: GetUserRouteParamRequiredDto,
+
     @Body() updateUserDto: UpdateUserDto,
   ) {
+    if (!getUserRouteParamRequiredDto) {
+      throw new BadRequestException('ID is required'); // ✅ custom friendly 400
+    }
     return {
-      message: `You sent a PATCH request to update user ${id}`,
+      message: `You sent a PATCH request to update user ${getUserRouteParamRequiredDto.id}`,
       data: updateUserDto,
     };
   }
