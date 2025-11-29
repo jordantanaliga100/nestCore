@@ -12,8 +12,8 @@ export class CreateUserDto {
   @IsString({ message: 'Must be a string, not a number' })
   @IsNotEmpty({ message: 'Name cannot be empty' })
   @MinLength(3, { message: 'Name must be at least 3 characters' })
-  @MaxLength(96, { message: 'Name cannot exceed 96 characters' })
-  name: string;
+  @MaxLength(96, { message: 'First name cannot exceed 96 characters' })
+  firstName: string;
 
   @IsString({ message: 'Must be a string, not a number' })
   @IsOptional()

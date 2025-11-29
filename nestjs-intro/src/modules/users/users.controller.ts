@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  DefaultValuePipe,
   Delete,
   Get,
   Param,
@@ -12,7 +11,10 @@ import {
   Query,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { GetUserParamRequiredDto } from './dto/get-users-query-param.dto';
+import {
+  GetUserQueryParamDto,
+  GetUsersRouteParamDto,
+} from './dto/get-users-query-param.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 // @Param() params: any, @Query() query: any)
@@ -37,46 +39,45 @@ export class UsersController {
     };
   }
 
-  @Get()
-  public getUser() {
-    // so pwede ako mag query dito sa userService ng findAll()
-    return {
-      message: `You sent a GET request to  user `,
-    };
-  }
+  // @Get()
+  // public getUser() {
+  //   // so pwede ako mag query dito sa userService ng findAll()
+  //   return {
+  //     message: `You sent a GET request to  user `,
+  //   };
+  // }
 
-  @Get(':id/:category?')
+  @Get(':id?/:category?')
   public getUsers(
-    @Param('id', ParseIntPipe) id: number | undefined,
-    @Param('category') category: string | undefined,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Param() getUsersRouteParamsDto: GetUsersRouteParamDto,
+    @Query() getUserQueryParamDto: GetUserQueryParamDto,
   ): string {
-    console.log('route params', {
-      id: typeof id,
-      ID: id,
-    });
-    console.log('query params', {
-      limit,
-      page,
-    });
+    console.log(getUsersRouteParamsDto);
+    console.log(getUserQueryParamDto);
 
-    if (id && !category) {
+    if (getUsersRouteParamsDto) {
       // so pwede ako mag query dito sa userService ng findUser(id)
       return `You sent a GET request with ID to the users endpoint  `;
     } else {
       // so pwede ako mag query dito sa userService ng findUser(id, posts)
       return `You sent a GET request with OPTIONAL PARAMS to the users endpoint  `;
     }
+
+    // console.log('route params', {
+    //   id: typeof id,
+    //   ID: id,
+    // });
+    // console.log('query params', {
+    //   limit,
+    //   page,
+    // });
   }
 
   @Patch(':id')
   public updateUser(
-    @Param() getUserParamRequiredDto: GetUserParamRequiredDto,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    const { id } = getUserParamRequiredDto;
-
     return {
       message: `You sent a PATCH request to update user ${id}`,
       data: updateUserDto,
@@ -84,14 +85,14 @@ export class UsersController {
   }
 
   @Put(':id')
-  public replaceUser(@Param('id') id: string) {
+  public replaceUser(@Param('id', ParseIntPipe) id: number) {
     return {
       message: `You sent a PUT request to replace user #${id}`,
     };
   }
 
   @Delete(':id')
-  public deleteUser(@Param('id') id: string) {
+  public deleteUser(@Param('id', ParseIntPipe) id: number) {
     return {
       message: `You sent a DELETE request to remove user #${id}`,
     };
