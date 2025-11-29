@@ -1,24 +1,39 @@
+/* eslint-disable @typescript-eslint/no-redundant-type-constituents */
 import {
+  BadRequestException,
   Body,
   Controller,
   DefaultValuePipe,
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Put,
   Query,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { GetUserParamRequiredDto } from './dto/get-users-query-param.dto';
+import {
+  GetUserRouteParamRequiredDto,
+  GetUsersRouteParamDto,
+} from './dto/get-users-query-param.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UsersService } from './users.service';
+import { User, UsersService } from './users.service';
 // @Param() params: any, @Query() query: any)
 
 @Controller('users/')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  // @Get()
+  // public getUser(): { message: string; data?: any } {
+  //   const users = this.usersService.findAllUsers();
+  //   return {
+  //     message: 'You sent a GET request to the users endpoint',
+  //     data: users,
+  //   };
+  // }
 
   @Post()
   public createUser(
@@ -36,61 +51,67 @@ export class UsersController {
     };
   }
 
-  @Get()
-  public getUser() {
-    // so pwede ako mag query dito sa userService ng findAll()
-    return {
-      message: `You sent a GET request to  user `,
-    };
-  }
-
-  @Get(':id/:category?')
+  @Get(':id?')
   public getUsers(
-    @Param('id') id?: number,
-    @Param('category') category?: string,
-    @Query('limit', new DefaultValuePipe(10)) limit?: number,
-    @Query('page', new DefaultValuePipe(1)) page?: number,
-  ): string {
-    console.log('route params', {
-      id,
-      category,
-    });
-    console.log('query params', {
-      limit,
-      page,
-    });
+    @Param() getUsersRouteParamsDto: GetUsersRouteParamDto,
+    @Query('limit', new DefaultValuePipe(100)) limit: number,
+    @Query('page', new DefaultValuePipe(1)) page: number,
+  ): User | User[] | any {
+    console.log(getUsersRouteParamsDto);
+    // if (getUsersRouteParamsDto.id) {
+    //   return this.usersService.findOneById(getUsersRouteParamsDto);
+    // } else {
+    //   return this.usersService.findAllUsers(
+    //     getUsersRouteParamsDto,
+    //     limit,
+    //     page,
+    //   );
+    // }
 
-    if (id && !category) {
-      // so pwede ako mag query dito sa userService ng findUser(id)
-      return `You sent a GET request with ID to the users endpoint  `;
-    } else {
-      // so pwede ako mag query dito sa userService ng findUser(id, posts)
-      return `You sent a GET request with OPTIONAL PARAMS to the users endpoint  `;
-    }
+    // if (getUsersRouteParamsDto) {
+    //   // so pwede ako mag query dito sa userService ng findUser(id)
+    //   return `You sent a GET request with ID to the users endpoint  `;
+    // } else {
+    //   // so pwede ako mag query dito sa userService ng findUser(id, posts)
+    //   return `You sent a GET request with OPTIONAL PARAMS to the users endpoint  `;
+    // }
+
+    // console.log('route params', {
+    //   id: typeof id,
+    //   ID: id,
+    // });
+    // console.log('query params', {
+    //   limit,
+    //   page,
+    // });
+
+    return this.usersService.findAllUsers(getUsersRouteParamsDto, limit, page);
   }
 
-  @Patch(':id')
+  @Patch(':id?')
   public updateUser(
-    @Param() getUserParamRequiredDto: GetUserParamRequiredDto,
+    @Param() getUserRouteParamRequiredDto: GetUserRouteParamRequiredDto,
+
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    const { id } = getUserParamRequiredDto;
-
+    if (!getUserRouteParamRequiredDto) {
+      throw new BadRequestException('ID is required'); // ✅ custom friendly 400
+    }
     return {
-      message: `You sent a PATCH request to update user ${id}`,
+      message: `You sent a PATCH request to update user ${getUserRouteParamRequiredDto.id}`,
       data: updateUserDto,
     };
   }
 
   @Put(':id')
-  public replaceUser(@Param('id') id: string) {
+  public replaceUser(@Param('id', ParseIntPipe) id: number) {
     return {
       message: `You sent a PUT request to replace user #${id}`,
     };
   }
 
   @Delete(':id')
-  public deleteUser(@Param('id') id: string) {
+  public deleteUser(@Param('id', ParseIntPipe) id: number) {
     return {
       message: `You sent a DELETE request to remove user #${id}`,
     };

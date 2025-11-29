@@ -1,15 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { Type } from 'class-transformer';
-import { IsInt, IsOptional, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class GetUsersParamDto {
+export class GetUsersRouteParamDto {
+  @IsOptional()
+  @IsInt()
+  @Type(() => Number)
+  id?: number;
+
   @IsOptional()
   @IsString()
-  @Type(() => String)
-  username?: string;
+  category?: string;
 }
 
-export class GetUserQueryDto {
+export class GetUserQueryParamDto {
   @IsOptional()
   @IsInt()
   @Type(() => Number)
@@ -21,7 +24,9 @@ export class GetUserQueryDto {
   page?: number = 1;
 }
 
-export class GetUserParamRequiredDto {
+// ❗doesnt make sense to have optional id
+export class GetUserRouteParamRequiredDto {
+  @IsNotEmpty({ message: 'ID is required' })
   @IsInt({ message: 'ID must be an integer' })
   @Type(() => Number)
   id!: number;
