@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-redundant-type-constituents */
 import {
   BadRequestException,
   Body,
@@ -55,17 +57,17 @@ export class UsersController {
     @Param() getUsersRouteParamsDto: GetUsersRouteParamDto,
     @Query('limit', new DefaultValuePipe(100)) limit: number,
     @Query('page', new DefaultValuePipe(1)) page: number,
-  ): User | User[] | undefined {
+  ): User | User[] | any {
     console.log(getUsersRouteParamsDto);
-    if (getUsersRouteParamsDto.id) {
-      return this.usersService.findOneById(getUsersRouteParamsDto);
-    } else {
-      return this.usersService.findAllUsers(
-        getUsersRouteParamsDto,
-        limit,
-        page,
-      );
-    }
+    // if (getUsersRouteParamsDto.id) {
+    //   return this.usersService.findOneById(getUsersRouteParamsDto);
+    // } else {
+    //   return this.usersService.findAllUsers(
+    //     getUsersRouteParamsDto,
+    //     limit,
+    //     page,
+    //   );
+    // }
 
     // if (getUsersRouteParamsDto) {
     //   // so pwede ako mag query dito sa userService ng findUser(id)

@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PostsModule } from './modules/posts/posts.module';
-import { SampleModule } from './modules/sample[nest-v11]/sample.module';
 import { UsersModule } from './modules/users/users.module';
+import { SampleModule } from './modules/v11-sample/sample.module';
 
 // Modules
 @Module({

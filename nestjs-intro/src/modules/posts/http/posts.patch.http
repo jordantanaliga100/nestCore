@@ -1,0 +1,13 @@
+PATCH http://localhost:3000/api/v1/users
+Content-Type: application/json
+
+
+{
+
+  "email":"john@mail.com",
+  "password": "Secret@100",
+
+
+}
+
+
