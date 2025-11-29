@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Put,
@@ -46,14 +47,14 @@ export class UsersController {
 
   @Get(':id/:category?')
   public getUsers(
-    @Param('id') id?: number,
-    @Param('category') category?: string,
-    @Query('limit', new DefaultValuePipe(10)) limit?: number,
-    @Query('page', new DefaultValuePipe(1)) page?: number,
+    @Param('id', ParseIntPipe) id: number | undefined,
+    @Param('category') category: string | undefined,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
   ): string {
     console.log('route params', {
-      id,
-      category,
+      id: typeof id,
+      ID: id,
     });
     console.log('query params', {
       limit,
