@@ -1,10 +1,25 @@
-POST http://localhost:3000/api/v1/users
+POST http://localhost:3000/api/v1/posts
 Content-Type: application/json
 
+
 {
-  "firstName": "dan",
-  "email":"john@mail.com",
-  "password": "Secret@100"
-
+  "title": "My First Post",
+  "postType": "post",
+  "slug": "my-first-post",
+  "status": "published",
+  "content": "This is the content of the post.",
+  "schema": "{\"layout\":\"default\",\"seo\":{\"title\":\"My First Post\"}}",
+  "featuredImageUrl": "https://example.com/image.jpg",
+  "publishOn": "2025-11-30T10:00:00Z",
+  "tags": ["tech", "guide", "nestjs"],
+  "metaOptions": [
+    {
+      "key": "author",
+      "value": "Jordan"
+    },
+    {
+      "key": "readTime",
+      "value": "5 minutes"
+    }
+  ]
 }
-

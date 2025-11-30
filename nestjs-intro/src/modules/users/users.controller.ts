@@ -13,6 +13,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
 import {
   GetUserRouteParamRequiredDto,
@@ -22,6 +23,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UsersService } from './users.service';
 // @Param() params: any, @Query() query: any)
 
+@ApiTags(`Users`)
 @Controller('users/')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -52,6 +54,27 @@ export class UsersController {
   }
 
   @Get(':id?')
+  @ApiOperation({
+    summary: 'It fetches the list of all the users',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '👱 Users fetched successfully ',
+  })
+  @ApiQuery({
+    name: 'limit',
+    type: 'number',
+    required: false,
+    description: ' The number of entries returned per query',
+    example: 10,
+  })
+  @ApiQuery({
+    name: 'page',
+    type: 'number',
+    required: false,
+    description: ' The position of the page number that you want API to return',
+    example: 1,
+  })
   public getUsers(
     @Param() getUsersRouteParamsDto: GetUsersRouteParamDto,
     @Query('limit', new DefaultValuePipe(100)) limit: number,
@@ -59,8 +82,8 @@ export class UsersController {
   ): User | User[] | any {
     console.log(getUsersRouteParamsDto);
     // if (getUsersRouteParamsDto.id) {
-    //   return this.usersService.findOneById(getUsersRouteParamsDto);
-    // } else {
+    //   return this.usersService.findOneById(getUsersRouteParmsDto);
+    // } else {a
     //   return this.usersService.findAllUsers(
     //     getUsersRouteParamsDto,
     //     limit,
@@ -85,7 +108,7 @@ export class UsersController {
     //   page,
     // });
 
-    return this.usersService.findAllUsers(getUsersRouteParamsDto, limit, page);
+    return this.usersService.findAll(getUsersRouteParamsDto, limit, page);
   }
 
   @Patch(':id?')
