@@ -3,7 +3,7 @@ FROM node:20-alpine AS base
 WORKDIR /app 
 COPY package*.json ./ 
 # create a non-root user 
-RUN addgroup -g 1001 -S nestjs && adduser -u 1001 -S nestjs -G nestjs 
+# RUN addgroup -g 1001 -S nestjs && adduser -u 1001 -S nestjs -G nestjs 
 
 # Development 🛠️ 
 FROM base AS development 
