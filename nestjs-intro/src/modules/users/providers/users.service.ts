@@ -6,14 +6,10 @@ import {
   Inject,
   Injectable,
 } from '@nestjs/common';
+import { Repository } from 'typeorm';
 import { AuthService } from '../../auth/providers/auth.service';
 import { GetUsersRouteParamDto } from '../dto/get-users-query-param.dto';
-
-export interface User {
-  id?: number;
-  name: string;
-  email: string;
-}
+import { User } from '../user.entity';
 
 /**
  * Class to connect to users table
@@ -23,6 +19,7 @@ export class UsersService {
   constructor(
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
+    private usersRepository: Repository<User>,
   ) {}
   /**
    * The method to get all the users from the database

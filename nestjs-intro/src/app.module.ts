@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { PostsModule } from './modules/posts/posts.module';
+import { User } from './modules/users/user.entity';
 import { UsersModule } from './modules/users/users.module';
 import { SampleModule } from './modules/v11-sample/sample.module';
 
@@ -22,7 +23,7 @@ import { SampleModule } from './modules/v11-sample/sample.module';
       inject: [],
       useFactory: () => ({
         type: 'postgres',
-        entities: [],
+        entities: [User],
         synchronize: process.env.NODE_ENV === 'development',
 
         host: process.env.DB_HOST || 'db', // 👈 use 'db' as default
