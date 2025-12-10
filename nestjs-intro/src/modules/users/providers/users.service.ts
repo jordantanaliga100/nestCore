@@ -6,8 +6,8 @@ import {
   Inject,
   Injectable,
 } from '@nestjs/common';
-import { AuthService } from '../auth/providers/auth.service';
-import { GetUsersRouteParamDto } from './dto/get-users-query-param.dto';
+import { AuthService } from '../../auth/providers/auth.service';
+import { GetUsersRouteParamDto } from '../dto/get-users-query-param.dto';
 
 export interface User {
   id?: number;

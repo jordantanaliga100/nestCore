@@ -20,7 +20,7 @@ import {
   GetUsersRouteParamDto,
 } from './dto/get-users-query-param.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User, UsersService } from './users.service';
+import { User, UsersService } from './providers/users.service';
 // @Param() params: any, @Query() query: any)
 
 @ApiTags(`Users`)

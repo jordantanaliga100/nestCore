@@ -22,7 +22,7 @@ import { SampleModule } from './modules/v11-sample/sample.module';
       inject: [],
       useFactory: () => ({
         type: 'postgres',
-        entities: [''],
+        entities: [],
         synchronize: process.env.NODE_ENV === 'development',
 
         host: process.env.DB_HOST || 'db', // 👈 use 'db' as default
