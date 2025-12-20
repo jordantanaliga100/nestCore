@@ -20,7 +20,7 @@ import {
   GetUsersRouteParamDto,
 } from './dto/get-users-query-param.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User, UsersService } from './providers/users.service';
+import { UsersService } from './providers/users.service';
 // @Param() params: any, @Query() query: any)
 
 @ApiTags(`Users`)
@@ -41,15 +41,17 @@ export class UsersController {
   public createUser(
     @Body()
     createUserDto: CreateUserDto,
-  ): {
-    message: string;
-    data?: CreateUserDto;
-  } {
-    console.log(createUserDto instanceof CreateUserDto);
+  ) {
+    // : {
+    //   message: string;
+    //   data?: CreateUserDto | any;
+    // }
+
+    // console.log(createUserDto instanceof CreateUserDto);
 
     return {
       message: 'You sent a POST request to the users endpoint',
-      data: createUserDto,
+      data: this.usersService.createUser(createUserDto),
     };
   }
 
@@ -79,7 +81,7 @@ export class UsersController {
     @Param() getUsersRouteParamsDto: GetUsersRouteParamDto,
     @Query('limit', new DefaultValuePipe(100)) limit: number,
     @Query('page', new DefaultValuePipe(1)) page: number,
-  ): User | User[] | any {
+  ): any | any[] {
     console.log(getUsersRouteParamsDto);
     // if (getUsersRouteParamsDto.id) {
     //   return this.usersService.findOneById(getUsersRouteParmsDto);

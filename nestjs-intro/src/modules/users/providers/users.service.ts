@@ -1,13 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  forwardRef,
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AuthService } from '../../auth/providers/auth.service';
+import { CreateUserDto } from '../dto/create-user.dto';
 import { GetUsersRouteParamDto } from '../dto/get-users-query-param.dto';
 import { User } from '../user.entity';
 
@@ -17,36 +12,54 @@ import { User } from '../user.entity';
 @Injectable()
 export class UsersService {
   constructor(
-    @Inject(forwardRef(() => AuthService))
-    private readonly authService: AuthService,
+    // @Inject(forwardRef(() => AuthService))
+    // private readonly authService: AuthService,
+    @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
+
+  public async createUser(createUserDto: CreateUserDto) {
+    //check if the user with the same email exists
+    const existingUser = await this.usersRepository.findOne({
+      where: { email: createUserDto.email },
+    });
+
+    // if user exists, throw exception
+    // create a new user
+
+    const newUser = this.usersRepository.create(createUserDto);
+    const createdUser = this.usersRepository.save(newUser);
+
+    return createdUser;
+  }
+
   /**
    * The method to get all the users from the database
    
    */
-  findAll(
+  public findAll(
     getUserRouteParamDto: GetUsersRouteParamDto,
     limit: number,
     page: number,
   ) {
     //
-    const isAuth = this.authService.isAuth();
-    if (!isAuth) {
-      throw new HttpException(
-        {
-          status: HttpStatus.UNAUTHORIZED,
-          error: '💁 You need to be authenticated ',
-        },
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
+    // const isAuth = this.authService.isAuth();
+    // if (!isAuth) {
+    //   throw new HttpException(
+    //     {
+    //       status: HttpStatus.UNAUTHORIZED,
+    //       error: '💁 You need to be authenticated ',
+    //     },
+    //     HttpStatus.UNAUTHORIZED,
+    //   );
+    // }
 
-    const users: User[] = [
+    const users: any[] = [
       { id: 1, name: 'john', email: 'john@mail.com' },
       { id: 2, name: 'doe', email: 'doe@mail.com' },
     ];
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return users;
   }
 
