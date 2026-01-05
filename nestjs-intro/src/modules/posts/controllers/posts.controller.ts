@@ -4,11 +4,12 @@ import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreatePostDTO } from '../dtos/create-post.dto';
 import { PatchPostDTO } from '../dtos/patch-post.dto';
+import { PostsService } from '../providers/posts.service';
 
 @ApiTags('Posts')
 @Controller('posts')
 export class PostsController {
-  // constructor(private readonly postsService: PostsService) {}
+  constructor(private readonly postsService: PostsService) {}
 
   @Post()
   @ApiOperation({
@@ -28,12 +29,12 @@ export class PostsController {
     };
   }
 
-  @Get(':userId?')
+  @Get('/:userId?')
   @ApiOperation({
     summary: 'This API endpoint gets the posts',
   })
   public getPosts(@Param('userId') userId: string) {
-    return 'Getting posts for user ';
+    return this.postsService.findAll(userId);
   }
 
   @Patch()

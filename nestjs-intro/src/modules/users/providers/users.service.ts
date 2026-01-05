@@ -1,15 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { AuthService } from '../../auth/providers/auth.service';
 import { GetUsersRouteParamDto } from '../dtos/get-users-query-param.dto';
 
 @Injectable()
 export class UsersService {
+  constructor(
+    @Inject(forwardRef(() => AuthService))
+    private readonly authService: AuthService,
+  ) {}
   public findAll(
     getUsersRouteParamsDto: GetUsersRouteParamDto,
     limit: number,
     page: number,
   ) {
     console.log(getUsersRouteParamsDto);
+    // need the auth service
 
     return [
       { id: 1, name: 'john', email: 'john@mail.com' },
@@ -17,7 +23,7 @@ export class UsersService {
     ];
   }
 
-  public findOneById(id: number) {
+  public findOneById(id: string) {
     // const users: User[] = [
     //   { id: 1, name: 'john', email: 'john@mail.com' },
     //   { id: 2, name: 'doe', email: 'doe@mail.com' },
