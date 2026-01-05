@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { PostsModule } from './modules/posts/posts.module';
+import { TempModule } from './modules/temp/temp.module';
 import { User } from './modules/users/user.entity';
 import { UsersModule } from './modules/users/users.module';
 import { SampleModule } from './modules/v11-sample/sample.module';
@@ -38,6 +39,7 @@ import { SampleModule } from './modules/v11-sample/sample.module';
     UsersModule,
     PostsModule,
     AuthModule,
+    TempModule,
   ],
   controllers: [AppController],
   providers: [AppService],
