@@ -2,8 +2,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from '../dto/create-user.dto';
-import { GetUsersRouteParamDto } from '../dto/get-users-query-param.dto';
+import { CreateUserDTO } from '../dtos/create-user.dto';
+import { GetUsersRouteParamDto } from '../dtos/get-users-query-param.dto';
 import { User } from '../user.entity';
 
 /**
@@ -18,7 +18,7 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  public async createUser(createUserDto: CreateUserDto) {
+  public async createUser(createUserDto: CreateUserDTO) {
     //check if the user with the same email exists
     const existingUser = await this.usersRepository.findOne({
       where: { email: createUserDto.email },

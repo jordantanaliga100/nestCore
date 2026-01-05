@@ -8,7 +8,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class CreateUserDto {
+export class CreateUserDTO {
   @IsString({ message: 'Must be a string, not a number' })
   @IsNotEmpty({ message: 'Name cannot be empty' })
   @MinLength(3, { message: 'Name must be at least 3 characters' })
