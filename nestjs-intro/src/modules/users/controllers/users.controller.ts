@@ -14,12 +14,12 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from '../dto/create-user.dto';
+import { CreateUserDTO } from '../dtos/create-user.dto';
 import {
   GetUserRouteParamRequiredDto,
   GetUsersRouteParamDto,
-} from '../dto/get-users-query-param.dto';
-import { UpdateUserDto } from '../dto/update-user.dto';
+} from '../dtos/get-users-query-param.dto';
+import { UpdateUserDto } from '../dtos/update-user.dto';
 import { UsersService } from '../providers/users.service';
 // @Param() params: any, @Query() query: any)
 
@@ -30,32 +30,31 @@ export class UsersController {
 
   // @Get()
   // public getUser(): { message: string; data?: any } {
-  //   const users = this.usersService.findAllUsers();
   //   return {
   //     message: 'You sent a GET request to the users endpoint',
-  //     data: users,
   //   };
   // }
 
   @Post()
   public createUser(
     @Body()
-    createUserDto: CreateUserDto,
+    createUserDto: CreateUserDTO,
   ) {
     // : {
     //   message: string;
     //   data?: CreateUserDto | any;
     // }
 
-    // console.log(createUserDto instanceof CreateUserDto);
+    console.log(createUserDto instanceof CreateUserDTO);
 
     return {
       message: 'You sent a POST request to the users endpoint',
-      data: this.usersService.createUser(createUserDto),
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      data: createUserDto,
     };
   }
 
-  @Get(':id?')
+  @Get('/:id?/:category?')
   @ApiOperation({
     summary: 'It fetches the list of all the users',
   })
@@ -83,33 +82,14 @@ export class UsersController {
     @Query('page', new DefaultValuePipe(1)) page: number,
   ): any | any[] {
     console.log(getUsersRouteParamsDto);
-    // if (getUsersRouteParamsDto.id) {
-    //   return this.usersService.findOneById(getUsersRouteParmsDto);
-    // } else {a
-    //   return this.usersService.findAllUsers(
-    //     getUsersRouteParamsDto,
-    //     limit,
-    //     page,
-    //   );
-    // }
+    console.log(
+      typeof getUsersRouteParamsDto.id,
+      typeof getUsersRouteParamsDto.category,
+    );
 
-    // if (getUsersRouteParamsDto) {
-    //   // so pwede ako mag query dito sa userService ng findUser(id)
-    //   return `You sent a GET request with ID to the users endpoint  `;
-    // } else {
-    //   // so pwede ako mag query dito sa userService ng findUser(id, posts)
-    //   return `You sent a GET request with OPTIONAL PARAMS to the users endpoint  `;
-    // }
-
-    // console.log('route params', {
-    //   id: typeof id,
-    //   ID: id,
-    // });
-    // console.log('query params', {
-    //   limit,
-    //   page,
-    // });
-
+    if (!getUsersRouteParamsDto.id && !getUsersRouteParamsDto.category) {
+      return 'You sent a GET request with NO PARAMS to the users endpoint';
+    }
     return this.usersService.findAll(getUsersRouteParamsDto, limit, page);
   }
 
@@ -149,3 +129,30 @@ export class UsersController {
 // MODULAR WAY 🔴 | using DTO param
 // @Param() getUserParamDto: GetUsersParamDto,
 // @Query() getUserQueryDto: GetUserQueryDto,
+
+// if (getUsersRouteParamsDto.id) {
+//   return this.usersService.findOneById(getUsersRouteParmsDto);
+// } else {a
+//   return this.usersService.findAllUsers(
+//     getUsersRouteParamsDto,
+//     limit,
+//     page,
+//   );
+// }
+
+// if (getUsersRouteParamsDto) {
+//   // so pwede ako mag query dito sa userService ng findUser(id)
+//   return `You sent a GET request with ID to the users endpoint  `;
+// } else {
+//   // so pwede ako mag query dito sa userService ng findUser(id, posts)
+//   return `You sent a GET request with OPTIONAL PARAMS to the users endpoint  `;
+// }
+
+// console.log('route params', {
+//   id: typeof id,
+//   ID: id,
+// });
+// console.log('query params', {
+//   limit,
+//   page,
+// });

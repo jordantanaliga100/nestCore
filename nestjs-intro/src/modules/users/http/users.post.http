@@ -6,5 +6,6 @@ Content-Type: application/json
   "firstName": "iza",
   "lastName": "100",
   "email":"iza@mail.com",
-  "password": "Secret100!"
+  "password": "Secret123!",
+  "isActive": true
 }
