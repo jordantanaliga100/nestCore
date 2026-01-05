@@ -1,12 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   Headers,
   Ip,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Put,
@@ -25,22 +28,28 @@ export class TempController {
   // GET /temp
   @Get('/:id?/:category?')
   public getTemp(
-    @Param() params?: string,
-    @Query() query?: string,
-    @Headers() headers?: any,
-    @Ip() ip?: string,
-  ) {
-    console.log(params, query, headers, ip);
+    @Param('id', ParseIntPipe) id?: number,
+    @Param('category') category?: string,
+    @Query('weight', ParseIntPipe) weight?: number,
+    @Query('limit', new DefaultValuePipe(50), ParseIntPipe) limit?: number,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page?: number,
 
-    if (params) {
+    // @Headers() headers?: any,
+    // @Ip() ip?: string,
+  ) {
+    console.log({ id }, typeof id);
+    console.log({ category }, typeof category);
+    console.log({ weight }, typeof weight);
+    console.log({ limit }, typeof limit);
+    console.log({ page }, typeof page);
+
+    if (id || category) {
       return {
         message: 'Hello from TempController, with PARAM',
-        data: [],
       };
     }
     return {
       message: 'Hello from TempController',
-      data: [],
     };
   }
 

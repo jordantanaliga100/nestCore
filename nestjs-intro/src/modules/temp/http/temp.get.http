@@ -1,1 +1,2 @@
-GET http://localhost/api/v1/temp/123/metal?type=gold&weight=100
+# GET http://localhost/api/v1/temp/123/metal?type=gold&weight=100&active=false
+GET http://localhost/api/v1/temp/123/metal?weight=100
