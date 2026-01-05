@@ -14,13 +14,13 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from '../dto/create-user.dto';
 import {
   GetUserRouteParamRequiredDto,
   GetUsersRouteParamDto,
-} from './dto/get-users-query-param.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { UsersService } from './providers/users.service';
+} from '../dto/get-users-query-param.dto';
+import { UpdateUserDto } from '../dto/update-user.dto';
+import { UsersService } from '../providers/users.service';
 // @Param() params: any, @Query() query: any)
 
 @ApiTags(`Users`)
