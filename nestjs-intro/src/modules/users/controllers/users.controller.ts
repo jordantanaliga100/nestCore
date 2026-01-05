@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-redundant-type-constituents */
 import {
   BadRequestException,
@@ -24,7 +26,7 @@ import { UsersService } from '../providers/users.service';
 // @Param() params: any, @Query() query: any)
 
 @ApiTags(`Users`)
-@Controller('users/')
+@Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -91,9 +93,10 @@ export class UsersController {
       return 'You sent a GET request with NO PARAMS to the users endpoint';
     }
     return this.usersService.findAll(getUsersRouteParamsDto, limit, page);
+    // return 'You sent a GET request with PARAMS to the users endpoint';
   }
 
-  @Patch(':id?')
+  @Patch(':id')
   public updateUser(
     @Param() getUserRouteParamRequiredDto: GetUserRouteParamRequiredDto,
 

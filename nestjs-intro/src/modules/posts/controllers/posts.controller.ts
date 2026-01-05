@@ -1,14 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreatePostDTO } from '../dtos/create-post.dto';
 import { PatchPostDTO } from '../dtos/patch-post.dto';
-import { PostsService } from '../providers/posts.service';
 
 @ApiTags('Posts')
 @Controller('posts')
 export class PostsController {
-  constructor(private readonly postsService: PostsService) {}
+  // constructor(private readonly postsService: PostsService) {}
 
   @Post()
   @ApiOperation({
@@ -33,7 +33,7 @@ export class PostsController {
     summary: 'This API endpoint gets the posts',
   })
   public getPosts(@Param('userId') userId: string) {
-    return this.postsService.findAll(userId);
+    return 'Getting posts for user ';
   }
 
   @Patch()
