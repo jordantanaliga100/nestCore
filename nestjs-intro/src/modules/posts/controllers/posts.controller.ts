@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreatePostDTO } from './dtos/create-post.dto';
-import { PatchPostDTO } from './dtos/patch-post.dto';
-import { PostsService } from './providers/posts.service';
+import { CreatePostDTO } from '../dtos/create-post.dto';
+import { PatchPostDTO } from '../dtos/patch-post.dto';
+import { PostsService } from '../providers/posts.service';
 
 @ApiTags('Posts')
 @Controller('posts')
