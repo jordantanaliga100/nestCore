@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -28,7 +29,7 @@ export class PostsController {
     };
   }
 
-  @Get(':userId?')
+  @Get('/:userId?')
   @ApiOperation({
     summary: 'This API endpoint gets the posts',
   })

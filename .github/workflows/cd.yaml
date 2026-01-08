@@ -1,0 +1,35 @@
+name: CD
+on:
+  workflow_run:
+    workflows: ['CI']
+    types: completed
+  push:
+    branches: ['main']
+
+jobs:
+  build-and-deploy:
+    environment: dev
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          registry: docker.io
+          username: ${{vars.DOCKERHUB_USERNAME}}
+          password: ${{secrets.DOCKERHUB_TOKEN}}
+
+      - name: Build Docker image
+        run: |
+          docker build -t nestjs-app:latest .
+
+      - name: Push image
+        run: |
+          docker tag nestjs-app:latest ${{vars.DOCKERHUB_USERNAME}}/nestjs-app:${{github.sha}}
+          docker push ${{vars.DOCKERHUB_USERNAME}}/nestjs-app:${{github.sha}}
+
+      - name: Deploy
+        run: echo "Deploying to the cloud 🚀..."
+        # run: ssh user@server "docker pull username/nestjs-app:latest && docker-compose up -d"
