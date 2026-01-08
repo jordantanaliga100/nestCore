@@ -1,3 +1,11 @@
+### To run this app:
+
+```bash
+using docker:
+$ docker compose -f docker-compose.dev.yaml up -d
+$ docker compose -f docker-compose.dev.yaml down -v`
+```
+
 # 🚀 My NestJS Roadmap
 
 This is my personal roadmap for mastering **NestJS** and building scalable, enterprise-grade Node.js applications.  
