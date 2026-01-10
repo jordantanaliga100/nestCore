@@ -23,4 +23,4 @@ jobs:
           git fetch origin staging
           git checkout staging
           git merge origin/main --no-edit
-          git push origin staging
+          push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} staging
