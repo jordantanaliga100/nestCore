@@ -1,0 +1,30 @@
+name: Node Setup
+description: Checkout Cache and Install Deps
+
+inputs:
+  node-version:
+    description: Node version to use
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v5
+
+    # v1
+    # - uses: actions/cache@v4
+    #   id: cache
+    #   with:
+    #     path: node_modules
+    #     key: ${{runner.os}}-${{hashFiles('**/package-lock.json')}}
+
+    # v2
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs['node-version']}}
+        cache: npm
+
+    - name: Install Deps
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: npm ci
+      shell: bash
