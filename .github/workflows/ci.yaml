@@ -11,65 +11,44 @@ on:
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [18, 20]
+        os: [ubuntu-latest]
+    runs-on: ${{matrix.os}}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Cache
-        id: cache
-        uses: actions/cache@v4
+      - uses: ./.github/actions/node-setup
         with:
-          path: |
-            node_modules
-          key: ${{runner.os}}-${{hashFiles('**/package-lock.json')}}
-
-      - name: Install
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci
+          node-version: ${{matrix.node}}
       - name: Lint
         run: npm run lint
 
   test:
     needs: lint
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [18, 20]
+        os: [ubuntu-latest]
+    runs-on: ${{matrix.os}}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Cache
-        id: cache
-        uses: actions/cache@v4
+      - uses: ./.github/actions/node-setup
         with:
-          path: |
-            node_modules
-          key: ${{runner.os}}-${{hashFiles('**/package-lock.json')}}
-
-      - name: Install
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci
+          node-version: ${{matrix.node}}
 
       - name: Test
         run: echo "Skipping Tests... ☠️"
 
   build:
     needs: test
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [18, 20]
+        os: [ubuntu-latest]
+    runs-on: ${{matrix.os}}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Cache
-        id: cache
-        uses: actions/cache@v4
+      - uses: ./.github/actions/node-setup
         with:
-          path: |
-            node_modules
-          key: ${{runner.os}}-${{hashFiles('**/package-lock.json')}}
-
-      - name: Install
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci
+          node-version: ${{matrix.node}}
 
       - name: Build Project
         run: npm run build
