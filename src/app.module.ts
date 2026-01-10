@@ -6,6 +6,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { PostsModule } from './modules/posts/posts.module';
 import { User } from './modules/users/user.entity';
 import { UsersModule } from './modules/users/users.module';
+import { TagsModule } from './modules/tags/tags.module';
 // Modules
 @Module({
   imports: [
@@ -67,6 +68,7 @@ import { UsersModule } from './modules/users/users.module';
     UsersModule,
     PostsModule,
     AuthModule,
+    TagsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
