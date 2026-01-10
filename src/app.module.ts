@@ -3,11 +3,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
-import { PostsModule } from './modules/posts/posts.module';
-import { User } from './modules/users/user.entity';
-import { UsersModule } from './modules/users/users.module';
-import { TagsModule } from './modules/tags/tags.module';
 import { MetaOptionsModule } from './modules/meta-options/meta-options.module';
+import { PostsModule } from './modules/posts/posts.module';
+import { TagsModule } from './modules/tags/tags.module';
+import { UsersModule } from './modules/users/users.module';
 // Modules
 @Module({
   imports: [
@@ -40,7 +39,7 @@ import { MetaOptionsModule } from './modules/meta-options/meta-options.module';
       inject: [],
       useFactory: () => ({
         type: 'postgres',
-        entities: [User],
+        autoLoadEntities: true,
         synchronize: true,
         port: 5432,
         host: 'db',
