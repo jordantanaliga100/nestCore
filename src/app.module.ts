@@ -7,6 +7,7 @@ import { PostsModule } from './modules/posts/posts.module';
 import { User } from './modules/users/user.entity';
 import { UsersModule } from './modules/users/users.module';
 import { TagsModule } from './modules/tags/tags.module';
+import { MetaOptionsModule } from './modules/meta-options/meta-options.module';
 // Modules
 @Module({
   imports: [
@@ -69,6 +70,7 @@ import { TagsModule } from './modules/tags/tags.module';
     PostsModule,
     AuthModule,
     TagsModule,
+    MetaOptionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
