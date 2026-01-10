@@ -60,5 +60,5 @@ jobs:
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: nestjs-build
+          name: nestjs-build-${{matrix.node}}-${{matrix.os}}
           path: dist/
