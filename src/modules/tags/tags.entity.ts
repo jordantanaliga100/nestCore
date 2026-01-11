@@ -46,6 +46,8 @@ export class Tags {
   })
   featuredImageUrl?: string;
 
+  // https://orkhan.gitbook.io/typeorm/docs/decorator-reference
+
   @CreateDateColumn()
   createDate: Date;
 
