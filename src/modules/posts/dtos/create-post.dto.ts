@@ -91,7 +91,7 @@ export class CreatePostDTO {
   })
   @IsISO8601()
   @IsOptional()
-  publishOn?: string;
+  publishOn?: Date;
 
   @ApiPropertyOptional({
     description: 'Array of tags as a string values',
@@ -106,27 +106,21 @@ export class CreatePostDTO {
   tags?: string[];
 
   @ApiPropertyOptional({
-    type: 'array',
+    type: 'object',
     required: false,
     items: {
       type: 'object',
       properties: {
-        key: {
-          type: 'string',
-          description: 'The key can be any string identifier',
-          example: 'sidebarEnabled',
-        },
-        value: {
-          type: 'any',
-          description: 'The value can be any string you want to save',
-          example: true,
+        metaValue: {
+          type: 'json',
+          description: 'The metavalue is a json string',
+          example: '{"sidebarEnable": true}',
         },
       },
     },
   })
   @IsOptional()
-  @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CreatePostMetaOptionsDTO)
-  metaOptions?: CreatePostMetaOptionsDTO[];
+  metaOptions?: CreatePostMetaOptionsDTO;
 }

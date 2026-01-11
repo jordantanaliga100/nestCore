@@ -1,36 +1,44 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { MetaOption } from '../../meta-options/meta-options.entity';
 import { UsersService } from '../../users/providers/users.service';
+import { CreatePostDTO } from '../dtos/create-post.dto';
+import { Post } from '../post.entity';
 
 @Injectable()
 export class PostsService {
   // injecting usersService
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    @InjectRepository(MetaOption)
+    private readonly metaOptionsRepository: Repository<MetaOption>,
 
-  public findAll(userId: string) {
+    @InjectRepository(Post)
+    private readonly postsRepository: Repository<Post>,
+
+    /**
+     * Inject  service
+     */
+    private readonly usersService: UsersService,
+  ) {}
+
+  public async create(createPostDto: CreatePostDTO) {
+    // create the post
+    const post = this.postsRepository.create({ ...createPostDto });
+
+    return await this.postsRepository.save(post);
+  }
+
+  public async findAll(userId: string) {
     console.log(userId);
-
-    // get the userId and its posts
-    // const user = this.usersService.findOneById(userId);
+    // get the user
     const user = this.usersService.findOneById(userId);
-    const posts = [
-      {
-        title: 'First Post',
-        content: 'This is the First post.',
-      },
-      {
-        title: 'Second Post',
-        content: 'This is the Second post.',
-      },
-    ];
-    const data = { ...user, posts };
-    return data;
-
-    // return [
-    //   { title: 'First Post', content: 'This is the First post.' },
-    //   { title: 'Second Post', content: 'This is the Second post.' },
-    // ];
-
-    // Logic to retrieve posts for a specific user
+    const posts = await this.postsRepository.find({
+      // relations: {
+      //   metaOptions: true,
+      // },
+    });
+    return posts;
   }
 }

@@ -19,14 +19,8 @@ export class PostsController {
     status: 201,
     description: 'You get a 201 response if your post is created sucessfully',
   })
-  public createPost(@Body() createPostDto: CreatePostDTO): {
-    message: string;
-    data: CreatePostDTO;
-  } {
-    return {
-      message: 'Hitting a post request',
-      data: createPostDto,
-    };
+  public createPost(@Body() createPostDto: CreatePostDTO) {
+    return this.postsService.create(createPostDto);
   }
 
   @Get('/:userId?')
