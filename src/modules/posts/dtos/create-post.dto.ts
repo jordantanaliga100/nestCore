@@ -10,12 +10,13 @@ import {
   IsString,
   IsUrl,
   Matches,
+  MaxLength,
   MinLength,
   ValidateNested,
 } from 'class-validator';
+import { CreatePostMetaOptionsDTO } from '../../meta-options/dtos/create-post-metaOptions.dto';
 import { postStatus } from '../enums/postStatus.enum';
 import { postType } from '../enums/postType.enum';
-import { CreatePostMetaOptionsDTO } from './create-post-metaOptions.dto';
 
 export class CreatePostDTO {
   @ApiProperty({
@@ -25,6 +26,7 @@ export class CreatePostDTO {
   @IsString()
   @MinLength(4)
   @IsNotEmpty()
+  @MaxLength(512)
   title: string;
 
   @ApiProperty({
@@ -42,6 +44,7 @@ export class CreatePostDTO {
   })
   @IsString()
   @IsNotEmpty()
+  @MaxLength(256)
   @Matches(/^[a-z0-9-]+$/, {
     message:
       'Slug must be lowercase letters, numbers, and hyphens only. Example: "my-url"',
@@ -79,6 +82,7 @@ export class CreatePostDTO {
   })
   @IsOptional()
   @IsUrl()
+  @MaxLength(1024)
   featuredImageUrl?: string;
 
   @ApiPropertyOptional({

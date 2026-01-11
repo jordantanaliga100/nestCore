@@ -42,18 +42,7 @@ export class UsersController {
     @Body()
     createUserDto: CreateUserDTO,
   ) {
-    // : {
-    //   message: string;
-    //   data?: CreateUserDto | any;
-    // }
-
-    console.log(createUserDto instanceof CreateUserDTO);
-
-    return {
-      message: 'You sent a POST request to the users endpoint',
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      data: createUserDto,
-    };
+    return this.usersService.createUser(createUserDto);
   }
 
   @Get('/:id?/:category?')
@@ -125,6 +114,7 @@ export class UsersController {
     };
   }
 }
+
 // @Param('id') id: string,
 // @Param('optional') optional?: string,
 // @Query('limit') limit?: string,

@@ -1,14 +1,38 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { AuthService } from '../../auth/providers/auth.service';
+import { CreateUserDTO } from '../dtos/create-user.dto';
 import { GetUsersRouteParamDto } from '../dtos/get-users-query-param.dto';
+import { User } from '../user.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
+
+  public async createUser(createUserDto: CreateUserDTO) {
+    // check if exists
+    const existingUser = await this.userRepository.findOne({
+      where: {
+        email: createUserDto.email,
+      },
+    });
+
+    // handl exception
+
+    // creaet user
+    let newUser = this.userRepository.create(createUserDto);
+    newUser = await this.userRepository.save(newUser);
+
+    return newUser;
+  }
+
   public findAll(
     getUsersRouteParamsDto: GetUsersRouteParamDto,
     limit: number,
@@ -16,11 +40,6 @@ export class UsersService {
   ) {
     console.log(getUsersRouteParamsDto);
     // need the auth service
-
-    return [
-      { id: 1, name: 'john', email: 'john@mail.com' },
-      { id: 2, name: 'peter', email: 'peter@mail.com' },
-    ];
   }
 
   public findOneById(id: string) {

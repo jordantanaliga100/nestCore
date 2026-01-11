@@ -1,27 +1,55 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import appConfig from '../config/app.config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
+import { MetaOptionsModule } from './modules/meta-options/meta-options.module';
 import { PostsModule } from './modules/posts/posts.module';
-import { TempModule } from './modules/temp/temp.module';
+import { TagsModule } from './modules/tags/tags.module';
 import { UsersModule } from './modules/users/users.module';
-import { SampleModule } from './modules/v11-sample/sample.module';
 
 // Modules
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      load: [appConfig],
-      isGlobal: true,
-      envFilePath: '.env.local',
-    }),
     // ConfigModule.forRoot({
     //   load: [appConfig],
     //   isGlobal: true,
     //   envFilePath: '.env.local',
     // }),
+    // ConfigModule.forRoot({
+    //   load: [appConfig],
+    //   isGlobal: true,
+    //   envFilePath: '.env.local',
+    // }),
+
+    // using Synchronous Connection 🔴
+    // TypeOrmModule.forRoot({
+    //   type: 'postgres',
+    //   entities: [],
+    //   synchronize: true,
+    //   port: 5432,
+    //   host: 'db',
+    //   username: 'postgres',
+    //   password: 'secret',
+    //   database: 'nestjs_blog',
+    // }),
+
+    //  using Asynchronous Connection 🟢
+    TypeOrmModule.forRootAsync({
+      imports: [],
+      inject: [],
+      useFactory: () => ({
+        type: 'postgres',
+        autoLoadEntities: true,
+        synchronize: true,
+        port: 5432,
+        host: 'db',
+        username: 'postgres',
+        password: 'secret',
+        database: 'nestjs_blog',
+      }),
+    }),
+
     // TypeOrmModule.forRootAsync({
     //   imports: [],
     //   inject: [],
@@ -38,11 +66,11 @@ import { SampleModule } from './modules/v11-sample/sample.module';
     //   }),
     // }),
 
-    SampleModule,
     UsersModule,
     PostsModule,
     AuthModule,
-    TempModule,
+    TagsModule,
+    MetaOptionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
