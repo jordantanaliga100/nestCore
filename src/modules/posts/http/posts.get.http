@@ -1,5 +1,4 @@
 
-GET http://localhost:3000/api/v1/posts/123
-
-
+GET http://localhost/api/v1/posts/26
+Content-Type: application/json
 

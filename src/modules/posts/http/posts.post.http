@@ -3,23 +3,16 @@ Content-Type: application/json
 
 
 {
-  "title": "My First Post",
+  "title": "Sample Post",
   "postType": "post",
-  "slug": "my-first-post",
-  "status": "published",
+  "slug": "my-sample-post",
+  "status": "scheduled",
   "content": "This is the content of the post.",
-  "schema": "{\"layout\":\"default\",\"seo\":{\"title\":\"My First Post\"}}",
+  "schema": "{\"layout\":\"default\",\"seo\":{\"title\":\"My Third Post\"}}",
   "featuredImageUrl": "https://example.com/image.jpg",
   "publishOn": "2025-11-30T10:00:00Z",
   "tags": ["tech", "guide", "nestjs"],
-  "metaOptions": [
-    {
-      "key": "author",
-      "value": "Jordan"
-    },
-    {
-      "key": "readTime",
-      "value": "5 minutes"
+  "metaOptions": {
+      "metaValue": "{\"sidebarEnabled\": false, \"footerActive\" : false}"
     }
-  ]
 }

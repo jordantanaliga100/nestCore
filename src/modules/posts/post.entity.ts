@@ -1,11 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { CreatePostMetaOptionsDTO } from '../meta-options/dtos/create-post-metaOptions.dto';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { MetaOption } from '../meta-options/meta-options.entity';
 import { postStatus } from './enums/postStatus.enum';
 import { postType } from './enums/postType.enum';
 
 @Entity()
 export class Post {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
   @Column({
@@ -64,6 +64,11 @@ export class Post {
   })
   publishOn?: Date;
 
+  @OneToOne(() => MetaOption, (metaOptions) => metaOptions.post, {
+    cascade: ['remove', 'insert'],
+    eager: true,
+  })
+  metaOptions?: MetaOption;
+
   tags?: string[];
-  metaOptions?: CreatePostMetaOptionsDTO;
 }
