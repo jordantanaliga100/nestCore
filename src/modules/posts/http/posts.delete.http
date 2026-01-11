@@ -1,4 +1,4 @@
-DELETE  http://localhost:3000/api/v1/posts/17
+DELETE  http://localhost:3000/api/v1/posts/26
 Content-Type: application/json
 
 

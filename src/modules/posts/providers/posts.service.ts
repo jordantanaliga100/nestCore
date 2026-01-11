@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MetaOption } from '../../meta-options/meta-options.entity';
@@ -30,11 +30,12 @@ export class PostsService {
     return await this.postsRepository.save(post);
   }
   public async find(id: number) {
-    return await this.postsRepository.findOne({
-      where: {
-        id: Number(id),
-      },
+    const post = await this.postsRepository.findOne({
+      where: { id },
+      relations: { metaOptions: true }, // load bi-directional relation
     });
+    if (!post) throw new NotFoundException('None Existing  ⚔️');
+    return post;
   }
 
   public async findAll() {
@@ -48,16 +49,11 @@ export class PostsService {
     return posts;
   }
   public async delete(id: number) {
-    // find the post equal id
-    const post = await this.postsRepository.findOneBy({ id });
-    console.log('id of the post', post?.id);
-    // deleting the post
+    await this.find(id);
+
     await this.postsRepository.delete(id);
-    // delete metaoptoms also
-    await this.metaOptionsRepository.delete(post?.metaOptions?.id as number);
     return {
-      deleted: true,
-      id,
+      status: `Post #${id} Successfully deleted`,
     };
   }
 }
