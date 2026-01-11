@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MetaOption } from '../../meta-options/meta-options.entity';
@@ -24,11 +28,22 @@ export class PostsService {
   ) {}
 
   public async create(createPostDto: CreatePostDTO) {
-    // create the post
-    const post = this.postsRepository.create({ ...createPostDto });
+    // find the author
+    const author = await this.usersService.findOneById(createPostDto.authorId);
 
-    return await this.postsRepository.save(post);
+    if (!author) {
+      throw new BadRequestException(`Can't create a post without a user `);
+    } else {
+      // create the post
+      const post = this.postsRepository.create({
+        ...createPostDto,
+        author,
+      });
+
+      return await this.postsRepository.save(post);
+    }
   }
+
   public async find(id: number) {
     const post = await this.postsRepository.findOne({
       where: { id },
@@ -42,9 +57,10 @@ export class PostsService {
     // get the user
     // const user = this.usersService.findOneById(userId);
     const posts = await this.postsRepository.find({
-      // relations: {
-      //   metaOptions: true,
-      // },
+      relations: {
+        metaOptions: true,
+        author: true,
+      },
     });
     return posts;
   }

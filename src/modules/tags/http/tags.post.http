@@ -1,0 +1,10 @@
+POST http://localhost/api/v1/tags
+Content-Type: application/json
+
+{
+  "name": "Technology",
+  "slug": "technology",
+  "description": "All articles related to software, hardware, and emerging technologies.",
+  "schema": "{\"@type\":\"Thing\",\"name\":\"Technology\"}",
+  "featuredImageUrl": "https://cdn.example.com/tags/technology.jpg"
+}
