@@ -29,16 +29,35 @@ export class PostsService {
 
     return await this.postsRepository.save(post);
   }
+  public async find(id: number) {
+    return await this.postsRepository.findOne({
+      where: {
+        id: Number(id),
+      },
+    });
+  }
 
-  public async findAll(userId: string) {
-    console.log(userId);
+  public async findAll() {
     // get the user
-    const user = this.usersService.findOneById(userId);
+    // const user = this.usersService.findOneById(userId);
     const posts = await this.postsRepository.find({
       // relations: {
       //   metaOptions: true,
       // },
     });
     return posts;
+  }
+  public async delete(id: number) {
+    // find the post equal id
+    const post = await this.postsRepository.findOneBy({ id });
+    console.log('id of the post', post?.id);
+    // deleting the post
+    await this.postsRepository.delete(id);
+    // delete metaoptoms also
+    await this.metaOptionsRepository.delete(post?.metaOptions?.id as number);
+    return {
+      deleted: true,
+      id,
+    };
   }
 }

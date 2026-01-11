@@ -11,7 +11,7 @@ import { postType } from './enums/postType.enum';
 
 @Entity()
 export class Post {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
   @Column({

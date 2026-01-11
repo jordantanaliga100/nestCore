@@ -3,10 +3,10 @@ Content-Type: application/json
 
 
 {
-  "title": "My Third Post",
+  "title": "Sample Post",
   "postType": "post",
-  "slug": "my-third-post-3",
-  "status": "published",
+  "slug": "my-sample-post",
+  "status": "scheduled",
   "content": "This is the content of the post.",
   "schema": "{\"layout\":\"default\",\"seo\":{\"title\":\"My Third Post\"}}",
   "featuredImageUrl": "https://example.com/image.jpg",
