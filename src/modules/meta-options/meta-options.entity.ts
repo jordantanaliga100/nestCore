@@ -8,7 +8,7 @@ import {
 
 @Entity()
 export class MetaOption {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column({

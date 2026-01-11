@@ -5,7 +5,7 @@ import { postType } from './enums/postType.enum';
 
 @Entity()
 export class Post {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column({
@@ -65,5 +65,6 @@ export class Post {
   publishOn?: Date;
 
   tags?: string[];
+
   metaOptions?: CreatePostMetaOptionsDTO;
 }
