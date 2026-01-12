@@ -46,7 +46,6 @@ export class UsersService {
     console.log(getUsersRouteParamsDto);
     // need the auth service
   }
-
   public async findOneById(id: number) {
     const existingUser = await this.userRepository.findOneBy({ id });
     if (!existingUser) {

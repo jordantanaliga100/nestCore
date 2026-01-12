@@ -8,3 +8,4 @@ Content-Type: application/json
   "schema": "{\"@type\":\"Thing\",\"name\":\"Technology\"}",
   "featuredImageUrl": "https://cdn.example.com/tags/technology.jpg"
 }
+
