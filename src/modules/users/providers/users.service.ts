@@ -1,5 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AuthService } from '../../auth/providers/auth.service';
@@ -41,17 +46,12 @@ export class UsersService {
     console.log(getUsersRouteParamsDto);
     // need the auth service
   }
-
-  public findOneById(id: string) {
-    // const users: User[] = [
-    //   { id: 1, name: 'john', email: 'john@mail.com' },
-    //   { id: 2, name: 'doe', email: 'doe@mail.com' },
-    // ];
-    return {
-      id: 1234,
-      firstName: 'Iza',
-      email: 'iza@mail.com',
-    };
+  public async findOneById(id: number) {
+    const existingUser = await this.userRepository.findOneBy({ id });
+    if (!existingUser) {
+      throw new NotFoundException('None Existing User ');
+    }
+    return existingUser;
   }
 }
 

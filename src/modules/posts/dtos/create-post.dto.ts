@@ -3,6 +3,7 @@ import { Type } from 'class-transformer';
 import {
   IsArray,
   IsEnum,
+  IsInt,
   IsISO8601,
   IsJSON,
   IsNotEmpty,
@@ -123,4 +124,13 @@ export class CreatePostDTO {
   @ValidateNested({ each: true })
   @Type(() => CreatePostMetaOptionsDTO)
   metaOptions?: CreatePostMetaOptionsDTO;
+
+  @ApiProperty({
+    type: 'integer',
+    required: true,
+    example: 1,
+  })
+  @IsInt()
+  @IsNotEmpty()
+  authorId: number;
 }

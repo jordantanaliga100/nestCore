@@ -14,5 +14,6 @@ Content-Type: application/json
   "tags": ["tech", "guide", "nestjs"],
   "metaOptions": {
       "metaValue": "{\"sidebarEnabled\": false, \"footerActive\" : false}"
-    }
+    },
+    "authorId": 1
 }
