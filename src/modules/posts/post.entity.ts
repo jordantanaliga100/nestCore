@@ -1,11 +1,14 @@
 import {
   Column,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { MetaOption } from '../meta-options/meta-options.entity';
+import { Tag } from '../tags/tags.entity';
 import { User } from '../users/user.entity';
 import { postStatus } from './enums/postStatus.enum';
 import { postType } from './enums/postType.enum';
@@ -73,14 +76,25 @@ export class Post {
 
   @OneToOne(() => MetaOption, (metaOptions) => metaOptions.post, {
     cascade: ['remove', 'insert'],
-    eager: true,
+    // eager: true,
   })
   metaOptions?: MetaOption;
 
   @ManyToOne(() => User, (user) => user.posts, {
-    eager: true,
+    // eager: true,
   })
   author: User;
 
-  tags?: string[];
+  // this for uni-directional
+  // @ManyToMany(() => Tag, {
+  //   // eager: true,
+  // })
+  // @JoinTable()
+  // tags?: Tag[];
+
+  @ManyToMany(() => Tag, (tag) => tag.posts, {
+    // eager: true,
+  })
+  @JoinTable()
+  tags?: Tag[];
 }

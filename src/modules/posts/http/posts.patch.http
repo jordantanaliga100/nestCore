@@ -1,27 +1,20 @@
-PATCH http://localhost:3000/api/v1/posts
+PATCH http://localhost/api/v1/posts
 Content-Type: application/json
 
 {
-  "id": 12,
-  "title": "My First Post",
+  "id": 27,
+  "title": "This is a test fo patch request for id 27",
   "postType": "post",
-  "slug": "my-first-post",
+  "slug": "my-first-post-for-id-27",
   "status": "published",
   "content": "This is the content of the post.",
   "schema": "{\"layout\":\"default\",\"seo\":{\"title\":\"My First Post\"}}",
   "featuredImageUrl": "https://example.com/image.jpg",
   "publishOn": "2025-11-30T10:00:00Z",
-  "tags": ["tech", "guide", "nestjs"],
   "metaOptions": [
-    {
-      "key": "author",
-      "value": "Jordan"
-    },
-    {
-      "key": "readTime",
-      "value": "5 minutes"
-    }
-  ]
+  
+  ],
+  "tags": [1,2,3,4]
 
 }
 

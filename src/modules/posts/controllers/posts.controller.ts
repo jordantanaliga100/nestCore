@@ -60,7 +60,7 @@ export class PostsController {
   @ApiResponse({ status: 404, description: 'Post not found' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   public updatePost(@Body() patchPostsDto: PatchPostDTO) {
-    console.log(patchPostsDto);
+    return this.postsService.update(patchPostsDto);
   }
 
   @Delete(':postId')
