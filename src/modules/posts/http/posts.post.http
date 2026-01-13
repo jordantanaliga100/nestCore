@@ -3,9 +3,9 @@ Content-Type: application/json
 
 
 {
-  "title": "Sample Post",
+  "title": "!!!!",
   "postType": "post",
-  "slug": "my-sample-post",
+  "slug": "this",
   "status": "scheduled",
   "content": "This is the content of the post.",
   "schema": "{\"layout\":\"default\",\"seo\":{\"title\":\"My Third Post\"}}",
@@ -15,5 +15,6 @@ Content-Type: application/json
   "metaOptions": {
       "metaValue": "{\"sidebarEnabled\": false, \"footerActive\" : false}"
     },
-    "authorId": 1
+  "authorId": 1,
+  "tags": [3,4]
 }

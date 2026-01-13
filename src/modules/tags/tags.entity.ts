@@ -3,12 +3,14 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Post } from '../posts/post.entity';
 
 @Entity()
-export class Tags {
+export class Tag {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -45,6 +47,11 @@ export class Tags {
     nullable: true,
   })
   featuredImageUrl?: string;
+
+  @ManyToMany(() => Post, (post) => post.tags, {
+    onDelete: 'CASCADE',
+  })
+  posts: Post[];
 
   // https://orkhan.gitbook.io/typeorm/docs/decorator-reference
 

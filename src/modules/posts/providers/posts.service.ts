@@ -7,8 +7,10 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MetaOption } from '../../meta-options/meta-options.entity';
+import { TagsService } from '../../tags/providers/tags.service';
 import { UsersService } from '../../users/providers/users.service';
 import { CreatePostDTO } from '../dtos/create-post.dto';
+import { PatchPostDTO } from '../dtos/patch-post.dto';
 import { Post } from '../post.entity';
 
 @Injectable()
@@ -24,13 +26,18 @@ export class PostsService {
     /**
      * Inject  service
      */
+    private readonly tagsService: TagsService,
     private readonly usersService: UsersService,
   ) {}
 
   public async create(createPostDto: CreatePostDTO) {
     // find the author
     const author = await this.usersService.findOneById(createPostDto.authorId);
+    // find tags
 
+    const tags = await this.tagsService.findMultipleTags(
+      createPostDto.tags || [],
+    );
     if (!author) {
       throw new BadRequestException(`Can't create a post without a user `);
     } else {
@@ -38,6 +45,7 @@ export class PostsService {
       const post = this.postsRepository.create({
         ...createPostDto,
         author,
+        tags,
       });
 
       return await this.postsRepository.save(post);
@@ -59,11 +67,55 @@ export class PostsService {
     const posts = await this.postsRepository.find({
       relations: {
         metaOptions: true,
-        author: true,
+        // author: true,
+        // tags: true,
       },
     });
     return posts;
   }
+
+  public async update(patchPostDto: PatchPostDTO) {
+    console.log('this is for patch', patchPostDto);
+    // return 'Patch  Request Hitted';
+    // find the tags
+    // const tags = await this.tagsService.findMultipleTags(
+    //   patchPostDto.tags || [],
+    // );
+    // find the post
+    const post = await this.postsRepository.findOneBy({ id: patchPostDto.id });
+
+    if (!post) {
+      throw new NotFoundException(`Post with ID ${patchPostDto.id} not found`);
+    }
+    // update the properties
+    Object.assign(post, {
+      title: patchPostDto.title,
+      content: patchPostDto.content,
+      status: patchPostDto.status,
+      postType: patchPostDto.postType,
+      slug: patchPostDto.slug,
+      featuredImageUrl: patchPostDto.featuredImageUrl,
+      publishOn: patchPostDto.publishOn,
+    });
+    // post?.title = patchPostDto.title ?? post?.title;
+    // post?.content = patchPostDto.content ?? post?.content;
+    // post?.status = patchPostDto.status ?? post?.status;
+    // post?.postType = patchPostDto.postType ?? post?.postType;
+    // post?.slug = patchPostDto.slug ?? post?.slug;
+    // post?.featuredImageUrl =
+    //   patchPostDto.featuredImageUrl ?? post?.featuredImageUrl;
+    // post?.publishOn = patchPostDto.publishOn ?? post?.publishOn;
+
+    // assign the new tags
+    // post?.tags = tags;
+    if (patchPostDto.tags) {
+      const tags = await this.tagsService.findMultipleTags(patchPostDto.tags);
+      post.tags = tags;
+    }
+    // save and return
+    return await this.postsRepository.save(post);
+  }
+
   public async delete(id: number) {
     await this.find(id);
 

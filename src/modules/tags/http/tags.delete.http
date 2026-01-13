@@ -1,0 +1,3 @@
+DELETE  http://localhost/api/v1/tags/?id=3
+Content-Type: application/json
+
