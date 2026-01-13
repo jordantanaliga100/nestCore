@@ -24,4 +24,11 @@ export class TagsController {
 
     return this.tagsService.delete(tagId);
   }
+
+  @Delete('/soft-delete')
+  public softDelete(@Query('id', ParseIntPipe) tagId: number) {
+    console.log('query for delete', tagId);
+
+    return this.tagsService.softDelete(tagId);
+  }
 }
