@@ -30,12 +30,10 @@ import { UsersService } from '../providers/users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  // @Get()
-  // public getUser(): { message: string; data?: any } {
-  //   return {
-  //     message: 'You sent a GET request to the users endpoint',
-  //   };
-  // }
+  @Get()
+  public getUser() {
+    return this.usersService.findAll({}, 10, 1);
+  }
 
   @Post()
   public createUser(
@@ -45,7 +43,7 @@ export class UsersController {
     return this.usersService.createUser(createUserDto);
   }
 
-  @Get('/:id?/:category?')
+  @Get('/:id/:category?')
   @ApiOperation({
     summary: 'It fetches the list of all the users',
   })
@@ -78,9 +76,6 @@ export class UsersController {
       typeof getUsersRouteParamsDto.category,
     );
 
-    if (!getUsersRouteParamsDto.id && !getUsersRouteParamsDto.category) {
-      return 'You sent a GET request with NO PARAMS to the users endpoint';
-    }
     return this.usersService.findAll(getUsersRouteParamsDto, limit, page);
     // return 'You sent a GET request with PARAMS to the users endpoint';
   }

@@ -5,6 +5,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AuthService } from '../../auth/providers/auth.service';
@@ -15,6 +16,11 @@ import { User } from '../user.entity';
 @Injectable()
 export class UsersService {
   constructor(
+    /**
+     * iNJECTING CONFIG SERVERVICE
+     *
+     */
+    private readonly configServive: ConfigService,
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
     @InjectRepository(User)
@@ -43,7 +49,10 @@ export class UsersService {
     limit: number,
     page: number,
   ) {
-    console.log(getUsersRouteParamsDto);
+    const env = this.configServive.get<string>('S3_BUCKET');
+    console.log(getUsersRouteParamsDto, env);
+    return [];
+
     // need the auth service
   }
   public async findOneById(id: number) {
