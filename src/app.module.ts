@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { appConfig } from '../config/app.config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import appConfig from './config/app.config';
+import databaseConfig from './config/db.config';
 import { AuthModule } from './modules/auth/auth.module';
 import { MetaOptionsModule } from './modules/meta-options/meta-options.module';
 import { PostsModule } from './modules/posts/posts.module';
@@ -16,7 +17,7 @@ const ENV = process.env.NODE_ENV;
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig],
+      load: [appConfig, databaseConfig],
       envFilePath: !ENV ? '.env' : `.env.${ENV}`,
     }),
 
@@ -49,7 +50,7 @@ const ENV = process.env.NODE_ENV;
         database: configService.get<string>('database.name'),
       }),
     }),
-
+    // using NORMAL Connection 🔴
     // TypeOrmModule.forRootAsync({
     //   imports: [],
     //   inject: [],
