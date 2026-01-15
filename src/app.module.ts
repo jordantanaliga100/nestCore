@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import appConfig from './config/app.config';
 import databaseConfig from './config/db.config';
+import envValidation from './config/env.validate';
 import { AuthModule } from './modules/auth/auth.module';
 import { MetaOptionsModule } from './modules/meta-options/meta-options.module';
 import { PostsModule } from './modules/posts/posts.module';
@@ -19,6 +20,7 @@ const ENV = process.env.NODE_ENV;
       isGlobal: true,
       load: [appConfig, databaseConfig],
       envFilePath: !ENV ? '.env' : `.env.${ENV}`,
+      validationSchema: envValidation,
     }),
 
     // using Synchronous Connection 🔴
