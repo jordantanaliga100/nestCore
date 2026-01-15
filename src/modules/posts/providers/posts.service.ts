@@ -109,6 +109,11 @@ export class PostsService {
     // post?.tags = tags;
     if (patchPostDto.tags) {
       const tags = await this.tagsService.findMultipleTags(patchPostDto.tags);
+      if (!tags || tags.length !== patchPostDto.tags.length) {
+        throw new BadRequestException(
+          'Please check your tag Ids and ensure they are correct',
+        );
+      }
       post.tags = tags;
     }
     // save and return
