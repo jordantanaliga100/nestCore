@@ -5,9 +5,10 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import type { ConfigType } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import profileConfig from '../../../config/profile.config';
 import { AuthService } from '../../auth/providers/auth.service';
 import { CreateUserDTO } from '../dtos/create-user.dto';
 import { GetUsersRouteParamDto } from '../dtos/get-users-query-param.dto';
@@ -20,7 +21,9 @@ export class UsersService {
      * iNJECTING CONFIG SERVERVICE
      *
      */
-    private readonly configServive: ConfigService,
+    @Inject(profileConfig.KEY)
+    private readonly profileConfiguration: ConfigType<typeof profileConfig>,
+
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
     @InjectRepository(User)
@@ -49,8 +52,8 @@ export class UsersService {
     limit: number,
     page: number,
   ) {
-    const env = this.configServive.get<string>('S3_BUCKET');
-    console.log(getUsersRouteParamsDto, env);
+    console.log(this.profileConfiguration);
+
     return [];
 
     // need the auth service
