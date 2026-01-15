@@ -16,6 +16,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { CreateManyUsersDTO } from '../dtos/create-many-users.dto';
 import { CreateUserDTO } from '../dtos/create-user.dto';
 import {
   GetUserRouteParamRequiredDto,
@@ -41,6 +42,14 @@ export class UsersController {
     createUserDto: CreateUserDTO,
   ) {
     return this.usersService.createUser(createUserDto);
+  }
+
+  @Post('create-many')
+  public createManyUsers(
+    @Body()
+    createManyUsersDto: CreateManyUsersDTO,
+  ) {
+    return this.usersService.createMany(createManyUsersDto);
   }
 
   @Get('/:id/:category?')

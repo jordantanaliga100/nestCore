@@ -12,11 +12,14 @@ import {
 import type { ConfigType } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { isPostgresError } from '../../../class/error';
 import profileConfig from '../../../config/profile.config';
 import { AuthService } from '../../auth/providers/auth.service';
+import { CreateManyUsersDTO } from '../dtos/create-many-users.dto';
 import { CreateUserDTO } from '../dtos/create-user.dto';
 import { GetUsersRouteParamDto } from '../dtos/get-users-query-param.dto';
 import { User } from '../user.entity';
+import { UsersCreateManyProvider } from './users-create-many.provider';
 
 @Injectable()
 export class UsersService {
@@ -32,37 +35,23 @@ export class UsersService {
     private readonly authService: AuthService,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    /**
+     * inject createmanyproviders
+     */
+    private readonly usersCreateManyProvider: UsersCreateManyProvider,
   ) {}
 
-  // public async createUser(createUserDto: CreateUserDTO) {
-  //   try {
-  //     // creaet user
-  //     const newUser = this.userRepository.create(createUserDto);
-  //     return await this.userRepository.save(newUser);
-  //   } catch (error: unknown) {
-  //     console.log('create user error', error);
-  //     if (isPostgresError(error) && error.code === '23505') {
-  //       throw new BadRequestException('User already exists');
-  //     }
-
-  //     throw new RequestTimeoutException(
-  //       'Unable to process your request at the moment. Please try again later',
-  //       {
-  //         description: 'Error connecting to the database',
-  //       },
-  //     );
-  //   }
-  // }
-
   public async createUser(createUserDto: CreateUserDTO) {
-    let existingUser = null;
     try {
-      existingUser = await this.userRepository.findOne({
-        where: {
-          email: createUserDto.email,
-        },
-      });
-    } catch (error) {
+      // creaet user
+      const newUser = this.userRepository.create(createUserDto);
+      return await this.userRepository.save(newUser);
+    } catch (error: unknown) {
+      console.log('create user error', error);
+      if (isPostgresError(error) && error.code === '23505') {
+        throw new BadRequestException('User already exists');
+      }
+
       throw new RequestTimeoutException(
         'Unable to process your request at the moment. Please try again later',
         {
@@ -70,24 +59,6 @@ export class UsersService {
         },
       );
     }
-    if (existingUser) {
-      throw new BadRequestException(`User already exists`);
-    }
-
-    // creaet user
-    let newUser = this.userRepository.create(createUserDto);
-    try {
-      newUser = await this.userRepository.save(newUser);
-    } catch (error) {
-      throw new RequestTimeoutException(
-        'Unable to process your request at the moment. Please try again later',
-        {
-          description: 'Error connecting to the database',
-        },
-      );
-    }
-
-    return newUser;
   }
 
   public findAll(
@@ -103,7 +74,6 @@ export class UsersService {
         description: 'Occured because the api endpoint is removed',
       },
     );
-    return [];
   }
   public async findOneById(id: number) {
     let user = null;
@@ -122,7 +92,50 @@ export class UsersService {
     }
     return user as User;
   }
+
+  public async createMany(createManyUsersDto: CreateManyUsersDTO) {
+    return await this.usersCreateManyProvider.createMany(createManyUsersDto);
+  }
 }
+
+// REFERENCE 🔴
+
+// public async createUser(createUserDto: CreateUserDTO) {
+//   let existingUser = null;
+//   try {
+//     existingUser = await this.userRepository.findOne({
+//       where: {
+//         email: createUserDto.email,
+//       },
+//     });
+//   } catch (error) {
+//     throw new RequestTimeoutException(
+//       'Unable to process your request at the moment. Please try again later',
+//       {
+//         description: 'Error connecting to the database',
+//       },
+//     );
+//   }
+//   if (existingUser) {
+//     throw new BadRequestException(`User already exists`);
+//   }
+
+//   // creaet user
+//   let newUser = this.userRepository.create(createUserDto);
+//   try {
+//     newUser = await this.userRepository.save(newUser);
+//   } catch (error) {
+//     throw new RequestTimeoutException(
+//       'Unable to process your request at the moment. Please try again later',
+//       {
+//         description: 'Error connecting to the database',
+//       },
+//     );
+//   }
+
+//   return newUser;
+// }
+
 // 🔴 OLD CODE
 
 // /* eslint-disable @typescript-eslint/no-unused-vars */
