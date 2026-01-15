@@ -15,6 +15,7 @@ import { Repository } from 'typeorm';
 import { isPostgresError } from '../../../class/error';
 import profileConfig from '../../../config/profile.config';
 import { AuthService } from '../../auth/providers/auth.service';
+import { CreateManyUsersDTO } from '../dtos/create-many-users.dto';
 import { CreateUserDTO } from '../dtos/create-user.dto';
 import { GetUsersRouteParamDto } from '../dtos/get-users-query-param.dto';
 import { User } from '../user.entity';
@@ -92,8 +93,8 @@ export class UsersService {
     return user as User;
   }
 
-  public async createMany(createUsersDto: CreateUserDTO[]) {
-    return await this.usersCreateManyProvider.createMany(createUsersDto);
+  public async createMany(createManyUsersDto: CreateManyUsersDTO) {
+    return await this.usersCreateManyProvider.createMany(createManyUsersDto);
   }
 }
 
