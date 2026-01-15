@@ -43,6 +43,14 @@ export class UsersController {
     return this.usersService.createUser(createUserDto);
   }
 
+  @Post('create-many')
+  public createManyUsers(
+    @Body()
+    createUserDto: CreateUserDTO[],
+  ) {
+    return this.usersService.createMany(createUserDto);
+  }
+
   @Get('/:id/:category?')
   @ApiOperation({
     summary: 'It fetches the list of all the users',

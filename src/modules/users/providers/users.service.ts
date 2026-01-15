@@ -11,13 +11,14 @@ import {
 } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { isPostgresError } from '../../../class/error';
 import profileConfig from '../../../config/profile.config';
 import { AuthService } from '../../auth/providers/auth.service';
 import { CreateUserDTO } from '../dtos/create-user.dto';
 import { GetUsersRouteParamDto } from '../dtos/get-users-query-param.dto';
 import { User } from '../user.entity';
+import { UsersCreateManyProvider } from './users-create-many.provider';
 
 @Injectable()
 export class UsersService {
@@ -34,9 +35,9 @@ export class UsersService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     /**
-     * inject data source
+     * inject createmanyproviders
      */
-    private readonly dataSource: DataSource,
+    private readonly usersCreateManyProvider: UsersCreateManyProvider,
   ) {}
 
   public async createUser(createUserDto: CreateUserDTO) {
@@ -72,7 +73,6 @@ export class UsersService {
         description: 'Occured because the api endpoint is removed',
       },
     );
-    return [];
   }
   public async findOneById(id: number) {
     let user = null;
@@ -93,29 +93,7 @@ export class UsersService {
   }
 
   public async createMany(createUsersDto: CreateUserDTO[]) {
-    const newUsers: User[] = [];
-    // query runner isntance
-    const queryRunner = this.dataSource.createQueryRunner();
-    // connect instance to data source
-    await queryRunner.connect();
-    // start transaction
-    await queryRunner.startTransaction();
-    try {
-      for (const user of createUsersDto) {
-        const newUser = queryRunner.manager.create(User, user);
-        const result = await queryRunner.manager.save(newUser);
-
-        newUsers.push(result);
-      }
-      await queryRunner.commitTransaction();
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
-    } finally {
-      await queryRunner.release();
-    }
-    // ->  if successful, commit
-    // ->  if not, rollback
-    // release connection
+    return await this.usersCreateManyProvider.createMany(createUsersDto);
   }
 }
 

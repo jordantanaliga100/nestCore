@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import profileConfig from '../../config/profile.config';
 import { AuthModule } from '../auth/auth.module';
 import { UsersController } from './controllers/users.controller';
+import { UsersCreateManyProvider } from './providers/users-create-many.provider';
 import { UsersService } from './providers/users.service';
 import { User } from './user.entity';
 
@@ -14,7 +15,7 @@ import { User } from './user.entity';
     ConfigModule.forFeature(profileConfig),
   ],
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [UsersService, UsersCreateManyProvider],
   exports: [UsersService],
 })
 export class UsersModule {}
