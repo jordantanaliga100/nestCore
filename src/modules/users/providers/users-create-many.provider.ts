@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+/* eslint-disable no-unsafe-finally */
+import {
+  ConflictException,
+  Injectable,
+  RequestTimeoutException,
+} from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { CreateManyUsersDTO } from '../dtos/create-many-users.dto';
 import { User } from '../user.entity';
@@ -10,10 +15,17 @@ export class UsersCreateManyProvider {
     const newUsers: User[] = [];
     // query runner isntance
     const queryRunner = this.dataSource.createQueryRunner();
-    // connect instance to data source
-    await queryRunner.connect();
-    // start transaction
-    await queryRunner.startTransaction();
+
+    try {
+      // connect instance to data source
+      await queryRunner.connect();
+      // start transaction
+      await queryRunner.startTransaction();
+    } catch (error) {
+      if (error)
+        throw new RequestTimeoutException('Couldn not connect to the database');
+    }
+
     try {
       for (const user of createManyUsersDto.users) {
         const newUser = queryRunner.manager.create(User, user);
@@ -21,17 +33,24 @@ export class UsersCreateManyProvider {
 
         newUsers.push(result);
       }
+      // ->  if successful, commit
       await queryRunner.commitTransaction();
     } catch (error) {
-      if (error) {
-        await queryRunner.rollbackTransaction();
-      }
+      // ->  if not, rollback
+      await queryRunner.rollbackTransaction();
+      throw new ConflictException('Could not complete the transaction', {
+        description: String(error),
+      });
     } finally {
-      await queryRunner.release();
+      try {
+        await queryRunner.release();
+      } catch (error) {
+        throw new RequestTimeoutException('Could not realease the connection', {
+          description: String(error),
+        });
+      }
+      // release connection
     }
     return newUsers;
-    // ->  if successful, commit
-    // ->  if not, rollback
-    // release connection
   }
 }
