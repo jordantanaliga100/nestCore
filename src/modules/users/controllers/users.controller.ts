@@ -30,33 +30,20 @@ import { UsersService } from '../providers/users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  // @Get()
-  // public getUser(): { message: string; data?: any } {
-  //   return {
-  //     message: 'You sent a GET request to the users endpoint',
-  //   };
-  // }
+  @Get()
+  public getUser() {
+    return this.usersService.findAll({}, 10, 1);
+  }
 
   @Post()
   public createUser(
     @Body()
     createUserDto: CreateUserDTO,
   ) {
-    // : {
-    //   message: string;
-    //   data?: CreateUserDto | any;
-    // }
-
-    console.log(createUserDto instanceof CreateUserDTO);
-
-    return {
-      message: 'You sent a POST request to the users endpoint',
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      data: createUserDto,
-    };
+    return this.usersService.createUser(createUserDto);
   }
 
-  @Get('/:id?/:category?')
+  @Get('/:id/:category?')
   @ApiOperation({
     summary: 'It fetches the list of all the users',
   })
@@ -89,9 +76,6 @@ export class UsersController {
       typeof getUsersRouteParamsDto.category,
     );
 
-    if (!getUsersRouteParamsDto.id && !getUsersRouteParamsDto.category) {
-      return 'You sent a GET request with NO PARAMS to the users endpoint';
-    }
     return this.usersService.findAll(getUsersRouteParamsDto, limit, page);
     // return 'You sent a GET request with PARAMS to the users endpoint';
   }
@@ -125,6 +109,7 @@ export class UsersController {
     };
   }
 }
+
 // @Param('id') id: string,
 // @Param('optional') optional?: string,
 // @Query('limit') limit?: string,

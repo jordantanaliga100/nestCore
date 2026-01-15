@@ -2,10 +2,10 @@ name: CD
 
 on:
   workflow_dispatch: # manual trigger
-  push:
-    branches:
-      - staging # deploy to staging automatically on staging push
-      - main # deploy to production automatically on main push
+  # push:
+  #   branches:
+  #     - staging # deploy to staging automatically on staging push
+  #     - main # deploy to production automatically on main push
 
 jobs:
   deploy-staging:

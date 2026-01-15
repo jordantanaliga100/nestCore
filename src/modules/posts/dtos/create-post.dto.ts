@@ -3,6 +3,7 @@ import { Type } from 'class-transformer';
 import {
   IsArray,
   IsEnum,
+  IsInt,
   IsISO8601,
   IsJSON,
   IsNotEmpty,
@@ -10,12 +11,13 @@ import {
   IsString,
   IsUrl,
   Matches,
+  MaxLength,
   MinLength,
   ValidateNested,
 } from 'class-validator';
+import { CreatePostMetaOptionsDTO } from '../../meta-options/dtos/create-post-metaOptions.dto';
 import { postStatus } from '../enums/postStatus.enum';
 import { postType } from '../enums/postType.enum';
-import { CreatePostMetaOptionsDTO } from './create-post-metaOptions.dto';
 
 export class CreatePostDTO {
   @ApiProperty({
@@ -25,6 +27,7 @@ export class CreatePostDTO {
   @IsString()
   @MinLength(4)
   @IsNotEmpty()
+  @MaxLength(512)
   title: string;
 
   @ApiProperty({
@@ -42,6 +45,7 @@ export class CreatePostDTO {
   })
   @IsString()
   @IsNotEmpty()
+  @MaxLength(256)
   @Matches(/^[a-z0-9-]+$/, {
     message:
       'Slug must be lowercase letters, numbers, and hyphens only. Example: "my-url"',
@@ -79,6 +83,7 @@ export class CreatePostDTO {
   })
   @IsOptional()
   @IsUrl()
+  @MaxLength(1024)
   featuredImageUrl?: string;
 
   @ApiPropertyOptional({
@@ -87,42 +92,42 @@ export class CreatePostDTO {
   })
   @IsISO8601()
   @IsOptional()
-  publishOn?: string;
+  publishOn?: Date;
 
   @ApiPropertyOptional({
-    description: 'Array of tags as a string values',
-    example: ['tech', 'guide', 'nestjs'],
+    description: 'Array of ids of tags as a number values',
+    example: [1, 2, 3],
   })
   @IsOptional()
   @IsArray()
-  @IsString({ each: true })
-  @MinLength(3, {
-    each: true,
-  })
-  tags?: string[];
+  @IsInt({ each: true })
+  tags?: number[];
 
   @ApiPropertyOptional({
-    type: 'array',
+    type: 'object',
     required: false,
     items: {
       type: 'object',
       properties: {
-        key: {
-          type: 'string',
-          description: 'The key can be any string identifier',
-          example: 'sidebarEnabled',
-        },
-        value: {
-          type: 'any',
-          description: 'The value can be any string you want to save',
-          example: true,
+        metaValue: {
+          type: 'json',
+          description: 'The metavalue is a json string',
+          example: '{"sidebarEnable": true}',
         },
       },
     },
   })
   @IsOptional()
-  @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CreatePostMetaOptionsDTO)
-  metaOptions?: CreatePostMetaOptionsDTO[];
+  metaOptions?: CreatePostMetaOptionsDTO;
+
+  @ApiProperty({
+    type: 'integer',
+    required: true,
+    example: 1,
+  })
+  @IsInt()
+  @IsNotEmpty()
+  authorId: number;
 }

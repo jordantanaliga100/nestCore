@@ -1,0 +1,9 @@
+POST http://localhost/api/v1/tags
+Content-Type: application/json
+
+{
+  "name": "Javascript",
+  "slug": "javascript",
+  "description": "All articles related to software, hardware, and emerging technologies."
+  
+}

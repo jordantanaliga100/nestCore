@@ -1,27 +1,58 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import appConfig from '../config/app.config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import appConfig from './config/app.config';
+import databaseConfig from './config/db.config';
+import envValidation from './config/env.validate';
 import { AuthModule } from './modules/auth/auth.module';
+import { MetaOptionsModule } from './modules/meta-options/meta-options.module';
 import { PostsModule } from './modules/posts/posts.module';
-import { TempModule } from './modules/temp/temp.module';
+import { TagsModule } from './modules/tags/tags.module';
 import { UsersModule } from './modules/users/users.module';
-import { SampleModule } from './modules/v11-sample/sample.module';
 
+const ENV = process.env.NODE_ENV;
 // Modules
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [appConfig],
       isGlobal: true,
-      envFilePath: '.env.local',
+      load: [appConfig, databaseConfig],
+      envFilePath: !ENV ? '.env' : `.env.${ENV}`,
+      validationSchema: envValidation,
     }),
-    // ConfigModule.forRoot({
-    //   load: [appConfig],
-    //   isGlobal: true,
-    //   envFilePath: '.env.local',
+
+    // using Synchronous Connection 🔴
+    // TypeOrmModule.forRoot({
+    //   type: 'postgres',
+    //   entities: [],
+    //   synchronize: true,
+    //   port: 5432,
+    //   host: 'db',
+    //   username: 'postgres',
+    //   password: 'secret',
+    //   database: 'nestjs_blog',
     // }),
+
+    //  using Asynchronous Connection 🟢
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        autoLoadEntities: configService.get<boolean>(
+          'database.autoLoadEntities',
+        ),
+        synchronize: configService.get<boolean>('database.synchronize'),
+        port: Number(configService.get<number>('database.port')),
+        host: configService.get<string>('database.host'),
+        username: configService.get<string>('database.user'),
+        password: configService.get<string>('database.password'),
+        database: configService.get<string>('database.name'),
+      }),
+    }),
+    // using NORMAL Connection 🔴
     // TypeOrmModule.forRootAsync({
     //   imports: [],
     //   inject: [],
@@ -38,11 +69,11 @@ import { SampleModule } from './modules/v11-sample/sample.module';
     //   }),
     // }),
 
-    SampleModule,
     UsersModule,
     PostsModule,
     AuthModule,
-    TempModule,
+    TagsModule,
+    MetaOptionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
