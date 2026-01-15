@@ -51,6 +51,6 @@ export class UsersCreateManyProvider {
       }
       // release connection
     }
-    return newUsers;
+    return { users: newUsers };
   }
 }
