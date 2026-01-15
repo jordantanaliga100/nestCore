@@ -9,12 +9,13 @@ Content-Type: application/json
   "status": "scheduled",
   "content": "This is the content of the post.",
   "schema": "{\"layout\":\"default\",\"seo\":{\"title\":\"My Third Post\"}}",
-  "featuredImageUrl": "https://example.com/image.jpg",
+  "featuredImageUrl": "https://exam
+  "tags": [3,4]ple.com/image.jpg",
   "publishOn": "2025-11-30T10:00:00Z",
   "tags": ["tech", "guide", "nestjs"],
   "metaOptions": {
       "metaValue": "{\"sidebarEnabled\": false, \"footerActive\" : false}"
     },
   "authorId": 1,
-  "tags": [3,4]
 }
+

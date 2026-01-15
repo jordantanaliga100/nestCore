@@ -75,7 +75,6 @@ export class PostsService {
   }
 
   public async update(patchPostDto: PatchPostDTO) {
-    console.log('this is for patch', patchPostDto);
     // return 'Patch  Request Hitted';
     // find the tags
     // const tags = await this.tagsService.findMultipleTags(
@@ -110,6 +109,11 @@ export class PostsService {
     // post?.tags = tags;
     if (patchPostDto.tags) {
       const tags = await this.tagsService.findMultipleTags(patchPostDto.tags);
+      if (!tags || tags.length !== patchPostDto.tags.length) {
+        throw new BadRequestException(
+          'Please check your tag Ids and ensure they are correct',
+        );
+      }
       post.tags = tags;
     }
     // save and return
