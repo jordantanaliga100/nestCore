@@ -75,7 +75,6 @@ export class PostsService {
   }
 
   public async update(patchPostDto: PatchPostDTO) {
-    console.log('this is for patch', patchPostDto);
     // return 'Patch  Request Hitted';
     // find the tags
     // const tags = await this.tagsService.findMultipleTags(
