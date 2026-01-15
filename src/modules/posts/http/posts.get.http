@@ -1,3 +1,14 @@
+{{
+const date = new Date()
+exports.startDate = date.toString()
+exports.endDate = date.toString()
 
-GET http://localhost/api/v1/posts
+}}
+# GET http://localhost/api/v1/posts?startDate={{startDate}}&endDate={{endDate}}&limit=3&page=3
+# Content-Type: application/json
+
+
+
+GET http://localhost/api/v1/posts/?&limit=3&page=2
 Content-Type: application/json
+

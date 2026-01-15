@@ -15,6 +15,12 @@ Content-Type: application/json
 {
 "users": 
    [
+     {
+      "firstName": "chris",
+      "email": "chris@mail.com",
+      "lastName": "100",
+      "password": "Secret123!"
+    },
     {
       "firstName": "dan",
       "email": "dan@mail.com",

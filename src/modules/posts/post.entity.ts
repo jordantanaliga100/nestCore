@@ -76,12 +76,12 @@ export class Post {
 
   @OneToOne(() => MetaOption, (metaOptions) => metaOptions.post, {
     cascade: ['remove', 'insert'],
-    // eager: true,
+    eager: true,
   })
   metaOptions?: MetaOption;
 
   @ManyToOne(() => User, (user) => user.posts, {
-    // eager: true,
+    eager: true,
   })
   author: User;
 
@@ -93,7 +93,7 @@ export class Post {
   // tags?: Tag[];
 
   @ManyToMany(() => Tag, (tag) => tag.posts, {
-    // eager: true,
+    eager: true,
   })
   @JoinTable()
   tags?: Tag[];

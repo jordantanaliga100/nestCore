@@ -6,10 +6,13 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Paginated } from '../../../common/pagination/interfaces/paginated.interface';
+import { PaginationProvider } from '../../../common/pagination/providers/pagination.provider';
 import { MetaOption } from '../../meta-options/meta-options.entity';
 import { TagsService } from '../../tags/providers/tags.service';
 import { UsersService } from '../../users/providers/users.service';
 import { CreatePostDTO } from '../dtos/create-post.dto';
+import { GetPostsDTO } from '../dtos/get-posts.dto';
 import { PatchPostDTO } from '../dtos/patch-post.dto';
 import { Post } from '../post.entity';
 
@@ -17,6 +20,7 @@ import { Post } from '../post.entity';
 export class PostsService {
   // injecting usersService
   constructor(
+    private readonly paginationProvider: PaginationProvider,
     @InjectRepository(MetaOption)
     private readonly metaOptionsRepository: Repository<MetaOption>,
 
@@ -61,16 +65,16 @@ export class PostsService {
     return post;
   }
 
-  public async findAll() {
+  public async findAll(postQuery: GetPostsDTO): Promise<Paginated<Post>> {
     // get the user
     // const user = this.usersService.findOneById(userId);
-    const posts = await this.postsRepository.find({
-      relations: {
-        metaOptions: true,
-        // author: true,
-        // tags: true,
+    const posts = await this.paginationProvider.paginateQuery(
+      {
+        limit: postQuery.limit,
+        page: postQuery.page,
       },
-    });
+      this.postsRepository,
+    );
     return posts;
   }
 

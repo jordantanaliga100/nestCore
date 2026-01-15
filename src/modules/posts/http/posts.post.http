@@ -3,19 +3,19 @@ Content-Type: application/json
 
 
 {
-  "title": "!!!!",
+  "title": "test-7",
   "postType": "post",
-  "slug": "this",
+  "slug": "test-7",
   "status": "scheduled",
   "content": "This is the content of the post.",
   "schema": "{\"layout\":\"default\",\"seo\":{\"title\":\"My Third Post\"}}",
-  "featuredImageUrl": "https://exam
-  "tags": [3,4]ple.com/image.jpg",
+  "featuredImageUrl": "https://example.com/image.jpg",
+  "tags": [],
   "publishOn": "2025-11-30T10:00:00Z",
-  "tags": ["tech", "guide", "nestjs"],
+
   "metaOptions": {
       "metaValue": "{\"sidebarEnabled\": false, \"footerActive\" : false}"
     },
-  "authorId": 1,
+  "authorId": 1
 }
 
